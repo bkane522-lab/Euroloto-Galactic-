@@ -2,7 +2,7 @@
   "id": "/",
   "name": "Euroloto Galactic",
   "short_name": "Euroloto",
-  "description": "Application indépendante de génération de grilles EuroMillions et Loto avec Classique, Smart+, Premium Engine V1.2, logo V3 premium, timer, statistiques chaud/froid, historique et vérification indicative.",
+  "description": "Générateur indépendant EuroMillions et Loto avec Classique, Premium Smart+ et score indicatif.",
   "lang": "fr-FR",
   "start_url": "/?source=pwa",
   "scope": "/",
