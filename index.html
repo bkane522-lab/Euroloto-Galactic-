@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#061950" />
-  <meta name="description" content="Euroloto Galactic : générateur indépendant de grilles EuroMillions et Loto avec Classique, Smart+, timer, stats chaud/froid, historique et vérification indicative et Premium privé V1.3.2 avec UI bleu nuit." />
-  <title>Euroloto Galactic V1.3.2.2</title>
+  <meta name="description" content="Euroloto Galactic : générateur indépendant de grilles EuroMillions et Loto avec Classique, Smart+, timer, stats chaud/froid, historique et vérification indicative et Premium privé V1.3.3 compact." />
+  <title>Euroloto Galactic V1.3.3.2</title>
   <link rel="manifest" href="/manifest.json" />
   <link rel="apple-touch-icon" href="/icon-192.png" />
   <style>
@@ -328,109 +328,121 @@
     }
   </style>
 
-  <style id="v132-deep-blue-ui">
-    /* V1.3.2 : bas bleu nuit premium, proche du header */
+  <style id="v133-deep-blue-compact">
     .panel {
       background:
-        radial-gradient(circle at 12% 0%, rgba(48, 123, 255, .32), transparent 34%),
-        radial-gradient(circle at 90% 8%, rgba(255, 216, 77, .13), transparent 28%),
+        radial-gradient(circle at 12% 0%, rgba(48,123,255,.30), transparent 32%),
+        radial-gradient(circle at 90% 8%, rgba(255,216,77,.10), transparent 26%),
         linear-gradient(145deg, #063a91 0%, #071f62 42%, #04133c 100%);
-      border: 1px solid rgba(126, 173, 255, .40);
-      box-shadow: 0 20px 48px rgba(0, 16, 55, .46);
-      padding: 8px;
-      border-radius: 24px;
+      border: 1px solid rgba(126,173,255,.38);
+      box-shadow: 0 18px 42px rgba(0,16,55,.42);
+      padding: 7px;
+      border-radius: 23px;
+      min-height: 250px;
     }
 
     .panel-tabs {
-      background: rgba(255, 255, 255, .10);
-      border: 1px solid rgba(255, 255, 255, .13);
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.13);
       box-shadow: inset 0 1px 0 rgba(255,255,255,.12);
-      padding: 5px;
+      padding: 4px;
       gap: 4px;
-      margin-bottom: 8px;
-      border-radius: 18px;
+      margin-bottom: 7px;
+      border-radius: 17px;
     }
 
     .panel-tab {
       color: rgba(255,255,255,.66);
-      padding: 8px 1px;
-      font-size: .62rem;
-      border-radius: 14px;
+      padding: 7px 1px;
+      font-size: .60rem;
+      border-radius: 13px;
     }
 
     .panel-tab.active {
       background: linear-gradient(135deg, #ffffff, #eaf2ff);
       color: #071f62;
-      box-shadow: 0 9px 20px rgba(0, 0, 0, .18);
+      box-shadow: 0 8px 18px rgba(0,0,0,.18);
     }
 
     .panel-content {
       overflow: hidden;
       padding-right: 0;
+      min-height: 142px;
     }
 
     .box {
       background:
         radial-gradient(circle at 96% 0%, rgba(0,107,255,.08), transparent 30%),
         linear-gradient(180deg, #ffffff 0%, #eff6ff 100%);
-      border: 1px solid rgba(205, 225, 255, .92);
+      border: 1px solid rgba(205,225,255,.92);
       box-shadow: inset 0 1px 0 rgba(255,255,255,.92);
-      border-radius: 19px;
-      padding: 11px;
+      border-radius: 18px;
+      padding: 10px;
     }
 
     .box h4 {
       color: #071b4d;
       letter-spacing: -.2px;
+      margin-bottom: 6px;
     }
 
-    .ref-box {
-      padding: 12px;
+    .ref-box { padding: 10px; }
+
+    .ref-head {
+      gap: 8px;
+      margin-bottom: 5px;
     }
 
     .ref-head h4 {
       color: #071b4d;
-      font-size: .98rem;
+      font-size: .94rem;
     }
 
     .mini-edit-btn {
       background: linear-gradient(135deg, #ffffff, #eef5ff);
       border: 1px solid #bfd5ff;
       color: #07246c;
-      box-shadow: 0 6px 14px rgba(0, 30, 90, .10);
-      font-size: .69rem;
-      padding: 8px 12px;
+      box-shadow: 0 6px 14px rgba(0,30,90,.10);
+      font-size: .67rem;
+      padding: 7px 11px;
     }
 
     .ref-box p {
       color: #516986;
-      font-size: .75rem;
+      font-size: .72rem;
+      margin-bottom: 8px;
     }
 
     .placeholder-chip {
       background: linear-gradient(135deg, #ffffff, #edf5ff) !important;
       border-color: #bfd5ff !important;
       color: #5e7088 !important;
-      min-width: 92px;
+      min-width: 86px;
+      height: 34px;
       box-shadow: inset 0 1px 0 rgba(255,255,255,.9);
     }
 
-    .stats-grid {
-      gap: 8px;
-    }
+    .stats-grid { gap: 7px; }
 
     .stat-mini {
       background: linear-gradient(180deg, #ffffff, #eff7ff);
       border-color: #cbdcff;
-      box-shadow: 0 6px 14px rgba(0, 30, 90, .08);
+      box-shadow: 0 6px 14px rgba(0,30,90,.08);
+      padding: 8px;
     }
 
     .stat-title {
       color: #08215f !important;
-      font-size: .70rem !important;
+      font-size: .68rem !important;
+      margin-bottom: 6px !important;
     }
 
+    .mini-chips { gap: 4px; }
+
     .mini-chips .chip {
+      width: 28px;
+      height: 28px;
+      font-size: .67rem;
       border-width: 1px;
       box-shadow: inset 0 1px 0 rgba(255,255,255,.78);
     }
@@ -438,31 +450,31 @@
     .mini-note {
       display: inline-block;
       width: 100%;
-      background: rgba(7, 31, 98, .07);
-      border: 1px solid rgba(7, 31, 98, .08);
-      border-radius: 12px;
-      padding: 7px 8px;
+      background: rgba(7,31,98,.07);
+      border: 1px solid rgba(7,31,98,.08);
+      border-radius: 11px;
+      padding: 6px 7px;
       color: #4d6686 !important;
-      margin-top: 8px !important;
+      margin-top: 7px !important;
+      font-size: .68rem !important;
     }
 
-    .info-mini {
-      padding: 12px;
-    }
+    .info-mini { padding: 10px; }
 
     .info-line {
       color: #4d6686 !important;
-      font-size: .74rem !important;
-      margin-bottom: 4px !important;
+      font-size: .72rem !important;
+      margin-bottom: 3px !important;
+      line-height: 1.18 !important;
     }
 
     .legal-line {
       color: #6a7890 !important;
-      font-size: .68rem !important;
+      font-size: .66rem !important;
+      line-height: 1.18 !important;
     }
 
-    .copy-mini-btn,
-    .clear-btn {
+    .copy-mini-btn, .clear-btn {
       background: linear-gradient(135deg, #ffffff, #edf5ff);
       border: 1px solid #c9dcff;
       color: #08205d;
@@ -472,12 +484,12 @@
     .history-item {
       background: rgba(255,255,255,.68);
       border: 1px solid rgba(202,220,255,.92);
-      border-radius: 12px;
-      padding: 8px 9px;
-      margin-bottom: 6px;
+      border-radius: 11px;
+      padding: 7px 8px;
+      margin-bottom: 5px;
       color: #506887;
-      font-size: .82rem;
-      line-height: 1.25;
+      font-size: .76rem;
+      line-height: 1.2;
     }
 
     .history-item:last-child {
@@ -486,39 +498,39 @@
 
     #gainResult {
       background: rgba(255,255,255,.72);
-      border-radius: 14px;
-      padding: 8px;
+      border-radius: 13px;
+      padding: 7px;
       color: #526a89;
-      margin-top: 6px;
+      margin-top: 5px;
+      font-size: .78rem;
     }
 
     @media (max-height: 820px) {
       .panel {
-        border-radius: 22px;
-        padding: 7px;
+        border-radius: 21px;
+        padding: 6px;
+        min-height: 220px;
       }
 
+      .panel-content { min-height: 122px; }
+
       .box {
-        border-radius: 17px;
-        padding: 10px;
+        border-radius: 16px;
+        padding: 9px;
       }
 
       .panel-tab {
-        padding: 7px 1px;
-        font-size: .58rem;
+        padding: 6px 1px;
+        font-size: .56rem;
       }
 
-      .ref-head h4 {
-        font-size: .90rem;
-      }
+      .ref-head h4 { font-size: .88rem; }
 
-      .ref-box p {
-        font-size: .72rem;
-      }
+      .ref-box p { font-size: .69rem; }
 
-      .mini-note {
-        font-size: .68rem !important;
-        padding: 6px 7px;
+      .placeholder-chip {
+        min-width: 82px;
+        height: 32px;
       }
     }
   </style>
