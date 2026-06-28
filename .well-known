@@ -1,1 +1,12 @@
-
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "app.vercel.euroloto_galactic.twa",
+      "sha256_cert_fingerprints": [
+        "26:A2:F1:72:54:B1:CC:41:52:59:5B:19:77:E8:96:CA:89:04:19:32:C2:52:7B:1F:A5:63:44:E3:97:5B:E4:4E"
+      ]
+    }
+  }
+]
