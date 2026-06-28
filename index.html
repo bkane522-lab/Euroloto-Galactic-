@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#061950" />
   <meta name="description" content="Euroloto Galactic : générateur indépendant de grilles EuroMillions et Loto avec Classique, Smart+, timer, stats chaud/froid, historique et vérification indicative." />
-  <title>Euroloto Galactic V1.1.1</title>
+  <title>Euroloto Galactic V1.1.2</title>
   <link rel="manifest" href="/manifest.json" />
   <link rel="apple-touch-icon" href="/icon-192.png" />
   <style>
@@ -36,7 +36,7 @@
   </style>
 
   <style id="compact-mobile-v111">
-    /* V1.1.1 Compact Mobile: remonte les boutons pour éviter la barre Android */
+    /* V1.1.2 Mini Panel: remonte les boutons pour éviter la barre Android */
     .app {
       padding: 9px 12px calc(8px + env(safe-area-inset-bottom));
     }
@@ -151,6 +151,86 @@
     }
   </style>
 
+
+  <style id="mini-panel-v112">
+    /* V1.1.2 Mini Panel : le bouton Modifier reste visible sans scroll */
+    .panel {
+      min-height: 150px;
+    }
+
+    .panel-content {
+      overflow: hidden;
+    }
+
+    .ref-box {
+      padding: 10px 12px;
+    }
+
+    .ref-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .ref-head h4 {
+      font-size: .95rem;
+      margin: 0;
+      line-height: 1.1;
+    }
+
+    .mini-edit-btn {
+      width: auto;
+      margin: 0;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: .70rem;
+      white-space: nowrap;
+      background: white;
+    }
+
+    .ref-box p {
+      font-size: .78rem;
+      line-height: 1.2;
+      margin: 0;
+    }
+
+    .reference-chips {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 6px;
+      margin: 8px 0 0;
+      overflow-x: auto;
+      padding-bottom: 1px;
+      scrollbar-width: none;
+    }
+
+    .reference-chips::-webkit-scrollbar {
+      display: none;
+    }
+
+    .reference-chips .chip {
+      flex: 0 0 auto;
+      width: 37px;
+      height: 37px;
+      border-radius: 999px;
+      padding: 0;
+      display: grid;
+      place-items: center;
+      font-size: .84rem;
+    }
+
+    @media (max-height: 790px) {
+      .panel { min-height: 138px; }
+      .ref-box { padding: 9px 10px; }
+      .ref-head h4 { font-size: .88rem; }
+      .mini-edit-btn { padding: 7px 10px; font-size: .66rem; }
+      .ref-box p { font-size: .74rem; }
+      .reference-chips { gap: 5px; margin-top: 7px; }
+      .reference-chips .chip { width: 34px; height: 34px; font-size: .78rem; }
+    }
+  </style>
 </head>
 <body>
   <div class="stars"></div>
@@ -186,13 +266,13 @@
     <section class="panel">
       <div class="panel-tabs"><button class="panel-tab active" data-tab="tirage">Tirage</button><button class="panel-tab" data-tab="gain">Gain</button><button class="panel-tab" data-tab="stats">Stats</button><button class="panel-tab" data-tab="history">Historique</button><button class="panel-tab" data-tab="infos">Infos</button></div>
       <div class="panel-content">
-        <div class="section active" id="tirage"><div class="box"><h4>🏆 Tirage de référence</h4><p id="referenceText"></p><div class="chips" id="referenceChips"></div><button class="clear-btn" id="editReferenceBtn">Modifier le résultat</button></div></div>
+        <div class="section active" id="tirage"><div class="box ref-box"><div class="ref-head"><h4>🏆 Tirage de référence</h4><button class="clear-btn mini-edit-btn" id="editReferenceBtn">Modifier</button></div><p id="referenceText"></p><div class="chips reference-chips" id="referenceChips"></div></div></div>
         <div class="section" id="gain"><div class="box"><h4>💰 Gain remporté ou pas</h4><p id="gainText">Génère une grille puis appuie sur “Vérifier”.</p></div></div>
         <div class="section" id="stats"><div class="box"><h4>📊 Statistiques Smart+</h4><p>Numéros les plus sortis / favorisés localement</p><div class="chips" id="hotChips"></div><p style="margin-top:12px;">Numéros les moins sortis / froids</p><div class="chips" id="coldChips"></div><p id="smartScoreText" style="margin-top:12px;"></p></div></div>
         <div class="section" id="history"><div class="box"><h4>📜 Historique</h4><div id="historyList"></div><button class="clear-btn" id="clearHistoryBtn">🧹 Effacer</button></div></div><div class="section" id="infos"><div class="box"><h4>ℹ️ À propos</h4><p>Euroloto Galactic est une application indépendante, non affiliée à la FDJ. Les grilles sont générées aléatoirement. Le mode Smart+ applique seulement des filtres statistiques privés : équilibre pair/impair, petits/grands, somme, écarts, historique local, numéros chauds et froids.</p><p style="margin-top:10px;">Aucun tirage, score, statistique, algorithme ou système ne garantit un gain. Vérifie toujours les résultats et gains sur une source officielle ou sur ton reçu.</p><button class="clear-btn" id="copyLegalBtn">Copier l’avertissement</button></div></div>
       </div>
     </section>
-    <p class="footer">Application indépendante, non affiliée à la FDJ.<br>Numéros générés aléatoirement. Aucun gain garanti. V1.1.1 Compact Mobile</p>
+    <p class="footer">Application indépendante, non affiliée à la FDJ.<br>Numéros générés aléatoirement. Aucun gain garanti. V1.1.2 Mini Panel</p>
   </main>
   <div class="toast" id="toast"></div>
   <script>
