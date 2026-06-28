@@ -1,4 +1,4 @@
-const CACHE_NAME = "euroloto-galactic-v1.3.1-ui-blue";
+const CACHE_NAME = "euroloto-galactic-v1.3.2-deep-blue-ui";
 
 const CORE_ASSETS = [
   "/",
