@@ -1,4 +1,4 @@
-const CACHE_NAME = "euroloto-galactic-v1.1.3-correctifs";
+const CACHE_NAME = "euroloto-galactic-v1.2.1-apk-polish";
 
 const CORE_ASSETS = [
   "/",
@@ -7,7 +7,9 @@ const CORE_ASSETS = [
   "/manifest.json",
   "/icon-192.png",
   "/icon-512.png",
-  "/maskable-512.png"
+  "/maskable-512.png",
+  "/logo-v3-board.png",
+  "/.well-known/assetlinks.json"
 ];
 
 self.addEventListener("install", (event) => {

@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#061950" />
-  <meta name="description" content="Euroloto Galactic : générateur indépendant de grilles EuroMillions et Loto avec Classique, Smart+, timer, stats chaud/froid, historique et vérification indicative." />
-  <title>Euroloto Galactic V1.1.3</title>
+  <meta name="description" content="Euroloto Galactic : générateur indépendant de grilles EuroMillions et Loto avec Classique, Smart+, timer, stats chaud/froid, historique et vérification indicative et Premium Engine V1.2.1 avec logo V3 premium." />
+  <title>Euroloto Galactic V1.2.1</title>
   <link rel="manifest" href="/manifest.json" />
   <link rel="apple-touch-icon" href="/icon-192.png" />
   <style>
@@ -36,7 +36,7 @@
   </style>
 
   <style id="compact-mobile-v113">
-    /* V1.1.3 Correctifs: remonte les boutons pour éviter la barre Android */
+    /* V1.2.1 APK Polish: remonte les boutons pour éviter la barre Android */
     .app {
       padding: 9px 12px calc(8px + env(safe-area-inset-bottom));
     }
@@ -153,7 +153,7 @@
 
 
   <style id="mini-panel-v112">
-    /* V1.1.3 Correctifs : le bouton Modifier reste visible sans scroll */
+    /* V1.2.1 APK Polish : le bouton Modifier reste visible sans scroll */
     .panel {
       min-height: 150px;
     }
@@ -294,6 +294,40 @@
     }
 
   </style>
+  <style id="apk-polish-v121">
+    /* V1.2.1 APK Polish : logo V3 premium intégré */
+    .app-icon {
+      overflow: hidden;
+      padding: 0;
+      background: #020817;
+      box-shadow: 0 0 24px rgba(255,216,77,.50), 0 12px 26px rgba(0,0,0,.22);
+    }
+    .app-icon img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      border-radius: inherit;
+    }
+    .version-mini {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 6px;
+      color: rgba(255,255,255,.74);
+      font-size: .72rem;
+      font-weight: 850;
+      letter-spacing: .3px;
+    }
+    .version-mini::before {
+      content: "✦";
+      color: var(--gold);
+    }
+    @media (max-height: 820px) {
+      .version-mini { display: none; }
+    }
+  </style>
+
 </head>
 <body>
   <div class="stars"></div>
@@ -301,7 +335,7 @@
     <header class="hero">
       <div class="topbar">
         <div class="brand">
-          <div class="app-icon">🪐</div>
+          <div class="app-icon"><img src="/icon-192.png" alt="Logo Euroloto Galactic" /></div>
           <div><h1>EUROLOTO GALACTIC</h1><p>EuroMillions · Loto</p></div>
         </div>
         <div class="top-actions"><button class="smart-badge" id="smartBtn">Smart</button><button class="install-badge" id="installBtn">Installer</button></div>
@@ -309,7 +343,7 @@
       <div class="tagline">
         <small>Ce soir, tente ta grille</small>
         <h2>Générateur Premium</h2>
-        <strong>Classique + Smart+</strong>
+        <strong>Classique + Smart+</strong><span class="version-mini">APK Polish · Logo V3</span>
         <p>Grille classique ou Premium calculée en privé. Sans promesse de gain.</p>
       </div>
     </header>
@@ -332,18 +366,18 @@
         <div class="section active" id="tirage"><div class="box ref-box"><div class="ref-head"><h4>🏆 Tirage de référence</h4><button class="clear-btn mini-edit-btn" id="editReferenceBtn">Modifier</button></div><p id="referenceText"></p><div class="chips reference-chips" id="referenceChips"></div></div></div>
         <div class="section" id="gain"><div class="box"><h4>💰 Gain remporté ou pas</h4><p id="gainText">Génère une grille puis appuie sur “Vérifier”.</p></div></div>
         <div class="section" id="stats"><div class="box"><h4>📊 Statistiques Smart+</h4><div class="stats-grid"><div class="stat-mini"><p class="stat-title">🔥 Chauds</p><div class="chips mini-chips" id="hotChips"></div></div><div class="stat-mini"><p class="stat-title">❄️ Froids</p><div class="chips mini-chips" id="coldChips"></div></div></div><p id="smartScoreText" class="mini-note"></p></div></div>
-        <div class="section" id="history"><div class="box"><h4>📜 Historique</h4><div id="historyList"></div><button class="clear-btn" id="clearHistoryBtn">🧹 Effacer</button></div></div><div class="section" id="infos"><div class="box info-mini"><h4>ℹ️ Infos</h4><p class="info-line">App indépendante, non affiliée à la FDJ.</p><p class="info-line">Classique = génération aléatoire simple.</p><p class="info-line">Premium Smart+ = filtres privés : équilibre, somme, écarts, chaud/froid et historique local.</p><p class="legal-line">Aucun score ou algorithme ne garantit un gain. Vérifie toujours le résultat officiel et ton reçu.</p><button class="clear-btn copy-mini-btn" id="copyLegalBtn">Copier l’avertissement</button></div></div>
+        <div class="section" id="history"><div class="box"><h4>📜 Historique</h4><div id="historyList"></div><button class="clear-btn" id="clearHistoryBtn">🧹 Effacer</button></div></div><div class="section" id="infos"><div class="box info-mini"><h4>ℹ️ Infos</h4><p class="info-line">App indépendante, non affiliée à la FDJ.</p><p class="info-line">Classique = génération aléatoire simple.</p><p class="info-line">Premium Smart+ V1.2 = 2200 simulations privées + score renforcé : équilibre, somme, écarts, chaud/froid, couverture et historique local.</p><p class="legal-line">Aucun score ou algorithme ne garantit un gain. Vérifie toujours le résultat officiel et ton reçu.</p><button class="clear-btn copy-mini-btn" id="copyLegalBtn">Copier l’avertissement</button></div></div>
       </div>
     </section>
-    <p class="footer">Application indépendante, non affiliée à la FDJ.<br>Numéros générés aléatoirement. Aucun gain garanti. V1.1.3 Correctifs</p>
+    <p class="footer">Application indépendante, non affiliée à la FDJ.<br>Numéros générés aléatoirement. Aucun gain garanti. V1.2.1 APK Polish</p>
   </main>
   <div class="toast" id="toast"></div>
   <script>
-    const PREMIUM_CODE="galactic2026";const STORAGE_KEY="euroloto_galactic_v11_smart_plus";
+    const PREMIUM_CODE="galactic2026";const STORAGE_KEY="euroloto_galactic_v12_premium_engine";const LEGACY_KEYS=["euroloto_galactic_v11_smart_plus","euroloto_galactic_v112_mini_panel","euroloto_galactic_v111_compact_mobile"];const PREMIUM_SIMULATIONS=2200;
     const CONFIG={euro:{name:"EuroMillions",icon:"⭐",format:"5 + 2",mainMax:50,mainCount:5,extraMax:12,extraCount:2,extraName:"ÉTOILES",drawDays:[2,5],drawHour:21,drawMinute:5,referenceMain:[18,25,31,37,45],referenceExtra:[4,9],hotDefault:[30,31,24,7,41],coldDefault:[43,1,33,46,8]},loto:{name:"Loto",icon:"🎱",format:"5 + 1",mainMax:49,mainCount:5,extraMax:10,extraCount:1,extraName:"NUMÉRO CHANCE",drawDays:[1,3,6],drawHour:20,drawMinute:20,referenceMain:[1,15,32,37,39],referenceExtra:[1],hotDefault:[7,24,30,31,41],coldDefault:[1,8,33,43,46]}};
     let game="euro";let currentGrid=null;let state=loadState();let deferredPrompt=null;const $=s=>document.querySelector(s);const $$=s=>Array.from(document.querySelectorAll(s));init();
     function init(){bind();initInstall();renderGame();renderHistory();renderStats();updateTimer();setInterval(updateTimer,1000);registerSW()}
-    function loadState(){try{const raw=localStorage.getItem(STORAGE_KEY);if(!raw)return{premium:false,history:[],references:{}};const data=JSON.parse(raw);return{premium:Boolean(data.premium),history:Array.isArray(data.history)?data.history:[],references:data.references||{}}}catch{return{premium:false,history:[],references:{}}}}
+    function loadState(){const empty={premium:false,history:[],references:{}};try{let raw=localStorage.getItem(STORAGE_KEY);if(!raw){for(const key of LEGACY_KEYS){raw=localStorage.getItem(key);if(raw)break}}if(!raw)return empty;const data=JSON.parse(raw);const clean={premium:Boolean(data.premium),history:Array.isArray(data.history)?data.history:[],references:data.references||{}};localStorage.setItem(STORAGE_KEY,JSON.stringify(clean));return clean}catch{return empty}}
     function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
     function bind(){$("#euroBtn").onclick=()=>switchGame("euro");$("#lotoBtn").onclick=()=>switchGame("loto");$("#classicBtn").onclick=()=>generateClassic();$("#premiumBtn").onclick=()=>generatePremium();$("#smartBtn").onclick=()=>unlockPremium();$("#installBtn").onclick=installApp;$("#copyBtn").onclick=copyGrid;$("#waBtn").onclick=shareWhatsapp;$("#verifyBtn").onclick=verifyGrid;$("#editReferenceBtn").onclick=editReference;$("#clearHistoryBtn").onclick=clearHistory;$("#copyLegalBtn").onclick=copyLegal;$$(".panel-tab").forEach(btn=>{btn.onclick=()=>openTab(btn.dataset.tab)})}
     function switchGame(next){game=next;$("#euroBtn").classList.toggle("active",game==="euro");$("#lotoBtn").classList.toggle("active",game==="loto");renderGame();renderStats();renderHistory();updateTimer()}
@@ -354,22 +388,22 @@
     function renderReference(){const c=CONFIG[game];const ref=getReference();if(!ref){$("#referenceText").textContent=`${c.name} · résultat officiel à saisir manuellement`;$("#referenceChips").innerHTML=`<span class="chip placeholder-chip">À saisir</span>`;return}$("#referenceText").textContent=`${c.name} · résultat officiel saisi`;$("#referenceChips").innerHTML=ref.main.map(n=>`<span class="chip">${n}</span>`).join("")+ref.extra.map(n=>`<span class="chip hot">${n}</span>`).join("")}
     function buildClassicGrid(){const c=CONFIG[game];return{id:makeId(),game,type:"Classique",main:pickUnique(1,c.mainMax,c.mainCount),extra:pickUnique(1,c.extraMax,c.extraCount),score:0,createdAt:new Date().toISOString()}}
     function generateClassic(){currentGrid=buildClassicGrid();currentGrid.score=scoreGrid(currentGrid).score;saveHistory(currentGrid);renderBalls(currentGrid);renderScorePill();renderHistory();renderStats();toast("Grille classique générée 🎲")}
-    function generatePremium(){if(!state.premium){unlockPremium(()=>generatePremium());return}let best=null;for(let i=0;i<900;i++){const candidate=buildClassicGrid();candidate.type="Premium";const result=scoreGrid(candidate);candidate.score=result.score;candidate.reason=result.reason;if(!best||candidate.score>best.score)best=candidate}currentGrid=best;saveHistory(currentGrid);renderBalls(currentGrid);renderScorePill();renderHistory();renderStats();toast("Grille Premium générée ✨")}
-    function scoreGrid(grid){const c=CONFIG[grid.game];const profile=getProfile(grid.game);let score=35;const reason=[];const odds=grid.main.filter(n=>n%2!==0).length;const lows=grid.main.filter(n=>n<=Math.floor(c.mainMax/2)).length;const sum=grid.main.reduce((a,b)=>a+b,0);const gaps=[];for(let i=1;i<grid.main.length;i++)gaps.push(grid.main[i]-grid.main[i-1]);const consecutive=gaps.filter(g=>g===1).length;const averageGap=gaps.reduce((a,b)=>a+b,0)/gaps.length;const range=grid.main[grid.main.length-1]-grid.main[0];const decadeSpread=new Set(grid.main.map(n=>Math.floor((n-1)/10))).size;if(odds===2||odds===3){score+=14;reason.push("équilibre pair/impair")}if(lows===2||lows===3){score+=14;reason.push("équilibre petits/grands")}const minSum=grid.game==="euro"?115:105;const maxSum=grid.game==="euro"?175:165;if(sum>=minSum&&sum<=maxSum){score+=16;reason.push("somme cohérente")}if(consecutive<=1){score+=8;reason.push("peu de suites")}if(averageGap>=5){score+=8;reason.push("écarts corrects")}if(range>=25){score+=7;reason.push("bonne amplitude")}if(decadeSpread>=3){score+=7;reason.push("répartition par dizaines")}const hotHits=grid.main.filter(n=>profile.hot.includes(n)).length;const coldHits=grid.main.filter(n=>profile.cold.includes(n)).length;if(hotHits>=1&&hotHits<=3){score+=12;reason.push("mix numéros chauds")}if(coldHits>=1&&coldHits<=2){score+=7;reason.push("mix numéros froids")}const repetitionPenalty=countSimilarHistory(grid);score-=repetitionPenalty*5;if(repetitionPenalty===0)reason.push("faible répétition historique");return{score:Math.max(1,Math.min(99,score)),reason}}
+    function generatePremium(){if(!state.premium){unlockPremium(()=>generatePremium());return}let best=null;for(let i=0;i<PREMIUM_SIMULATIONS;i++){const candidate=buildClassicGrid();candidate.type="Premium";candidate.engine="V1.2.1";candidate.profile=premiumProfileFor(i);const result=scoreGrid(candidate,candidate.profile);candidate.score=result.score;candidate.reason=result.reason;candidate.profileLabel=result.profileLabel;if(!best||candidate.score>best.score||(candidate.score===best.score&&tieBreaker(candidate)>tieBreaker(best)))best=candidate}currentGrid=best;saveHistory(currentGrid);renderBalls(currentGrid);renderScorePill();renderHistory();renderStats();toast("Premium Engine V1.2.1 généré ✨")}
+    function premiumProfileFor(i){const profiles=["balanced","hotcold","coverage","antirepeat"];return profiles[i%profiles.length]}function profileLabel(key){return{balanced:"Équilibré",hotcold:"Chaud/Froid",coverage:"Large couverture",antirepeat:"Anti-répétition"}[key]||"Équilibré"}function tieBreaker(grid){const gaps=[];for(let i=1;i<grid.main.length;i++)gaps.push(grid.main[i]-grid.main[i-1]);const range=grid.main[grid.main.length-1]-grid.main[0];const decadeSpread=new Set(grid.main.map(n=>Math.floor((n-1)/10))).size;return range+decadeSpread*6+gaps.reduce((a,b)=>a+b,0)}function scoreGrid(grid,profileKey){const c=CONFIG[grid.game];const profile=getProfile(grid.game);profileKey=profileKey||grid.profile||"balanced";const weights={balanced:{pair:14,low:14,sum:18,gaps:8,range:8,spread:9,hot:10,cold:8,extra:5,repeat:10},hotcold:{pair:10,low:10,sum:14,gaps:7,range:7,spread:7,hot:19,cold:13,extra:4,repeat:8},coverage:{pair:11,low:11,sum:14,gaps:11,range:13,spread:15,hot:7,cold:7,extra:4,repeat:7},antirepeat:{pair:12,low:12,sum:15,gaps:8,range:8,spread:8,hot:8,cold:8,extra:4,repeat:19}}[profileKey]||{pair:14,low:14,sum:18,gaps:8,range:8,spread:9,hot:10,cold:8,extra:5,repeat:10};let score=28;const reason=[];const odds=grid.main.filter(n=>n%2!==0).length;const lows=grid.main.filter(n=>n<=Math.floor(c.mainMax/2)).length;const sum=grid.main.reduce((a,b)=>a+b,0);const gaps=[];for(let i=1;i<grid.main.length;i++)gaps.push(grid.main[i]-grid.main[i-1]);const consecutive=gaps.filter(g=>g===1).length;const averageGap=gaps.reduce((a,b)=>a+b,0)/gaps.length;const range=grid.main[grid.main.length-1]-grid.main[0];const decadeSpread=new Set(grid.main.map(n=>Math.floor((n-1)/10))).size;if(odds===2||odds===3){score+=weights.pair;reason.push("équilibre pair/impair")}if(lows===2||lows===3){score+=weights.low;reason.push("équilibre petits/grands")}const minSum=grid.game==="euro"?105:100;const maxSum=grid.game==="euro"?185:170;const idealMin=grid.game==="euro"?118:108;const idealMax=grid.game==="euro"?172:162;if(sum>=idealMin&&sum<=idealMax){score+=weights.sum;reason.push("somme forte")}else if(sum>=minSum&&sum<=maxSum){score+=Math.floor(weights.sum*.55);reason.push("somme acceptable")}if(consecutive===0){score+=weights.gaps;reason.push("aucune suite")}else if(consecutive===1){score+=Math.floor(weights.gaps*.65);reason.push("peu de suites")}if(averageGap>=5){score+=Math.floor(weights.gaps*.55);reason.push("écarts corrects")}if(range>=28){score+=weights.range;reason.push("bonne amplitude")}else if(range>=22){score+=Math.floor(weights.range*.6);reason.push("amplitude correcte")}if(decadeSpread>=4){score+=weights.spread;reason.push("large couverture")}else if(decadeSpread>=3){score+=Math.floor(weights.spread*.72);reason.push("répartition par dizaines")}const hotHits=grid.main.filter(n=>profile.hot.includes(n)).length;const coldHits=grid.main.filter(n=>profile.cold.includes(n)).length;if(hotHits>=1&&hotHits<=3){score+=weights.hot;reason.push("mix numéros chauds")}if(coldHits>=1&&coldHits<=2){score+=weights.cold;reason.push("mix numéros froids")}if(grid.extra.length===2){const extraSum=grid.extra.reduce((a,b)=>a+b,0);if(extraSum>=5&&extraSum<=18){score+=weights.extra;reason.push("étoiles équilibrées")}}else{score+=Math.floor(weights.extra*.7)}const repetitionPenalty=countSimilarHistory(grid);score-=repetitionPenalty*6;if(repetitionPenalty===0){score+=weights.repeat;reason.push("anti-répétition historique")}return{score:Math.max(1,Math.min(99,score)),reason,profileLabel:profileLabel(profileKey)}}
     function countSimilarHistory(grid){return state.history.filter(item=>{if(item.game!==grid.game)return false;const matches=item.main.filter(n=>grid.main.includes(n)).length;return matches>=3}).length}
     function getProfile(profileGame){const c=CONFIG[profileGame];const counts=new Map();for(let i=1;i<=c.mainMax;i++)counts.set(i,0);const history=state.history.filter(g=>g.game===profileGame);const ref=state.references[profileGame];const validRef=ref&&Array.isArray(ref.main)&&ref.main.length===c.mainCount;if(!history.length&&!validRef)return{hot:c.hotDefault,cold:c.coldDefault};if(validRef)ref.main.forEach(n=>counts.set(n,(counts.get(n)||0)+3));history.forEach(g=>g.main.forEach(n=>counts.set(n,(counts.get(n)||0)+1)));const hot=[...counts.entries()].sort((a,b)=>b[1]-a[1]||a[0]-b[0]).slice(0,5).map(([n])=>n);const cold=[...counts.entries()].sort((a,b)=>a[1]-b[1]||a[0]-b[0]).slice(0,5).map(([n])=>n);return{hot,cold}}
-    function renderStats(){const profile=getProfile(game);$("#hotChips").innerHTML=profile.hot.map(n=>`<span class="chip hot">${n}</span>`).join("");$("#coldChips").innerHTML=profile.cold.map(n=>`<span class="chip cold">${n}</span>`).join("");if(currentGrid&&currentGrid.game===game){const scored=scoreGrid(currentGrid);$("#smartScoreText").textContent=`Score Smart+ : ${scored.score}/99 · ${scored.reason.slice(0,2).join(", ")||"analyse locale"}.`}else{$("#smartScoreText").textContent="Génère une grille pour afficher le score Smart+."}}
-    function renderScorePill(){if(!currentGrid){$("#scorePill").classList.remove("show");return}const scored=scoreGrid(currentGrid);currentGrid.score=scored.score;currentGrid.reason=scored.reason;$("#scorePill").textContent=`Score Smart+ : ${scored.score}/99`;$("#scorePill").classList.add("show")}
+    function renderStats(){const profile=getProfile(game);$("#hotChips").innerHTML=profile.hot.map(n=>`<span class="chip hot">${n}</span>`).join("");$("#coldChips").innerHTML=profile.cold.map(n=>`<span class="chip cold">${n}</span>`).join("");if(currentGrid&&currentGrid.game===game){const scored=scoreGrid(currentGrid,currentGrid.profile);const engine=currentGrid.type==="Premium"?`Moteur V1.2 · ${PREMIUM_SIMULATIONS} simulations · ${scored.profileLabel}`:"Analyse locale";$("#smartScoreText").textContent=`${engine} · Score ${scored.score}/99 · ${scored.reason.slice(0,2).join(", ")||"équilibre"}.`}else{$("#smartScoreText").textContent="Premium V1.2 : 2200 simulations privées, score renforcé et filtres chaud/froid."}}
+    function renderScorePill(){if(!currentGrid){$("#scorePill").classList.remove("show");return}const scored=scoreGrid(currentGrid,currentGrid.profile);currentGrid.score=scored.score;currentGrid.reason=scored.reason;currentGrid.profileLabel=scored.profileLabel;$("#scorePill").textContent=`Score Smart+ : ${scored.score}/99`;$("#scorePill").classList.add("show")}
     function verifyGrid(){if(!currentGrid||currentGrid.game!==game){toast("Génère d’abord une grille.");return}const c=CONFIG[game];const ref=getReference();if(!ref){openTab("tirage");toast("Saisis d’abord le résultat officiel.");return}const mainHits=currentGrid.main.filter(n=>ref.main.includes(n)).length;const extraHits=currentGrid.extra.filter(n=>ref.extra.includes(n)).length;let possible=false;if(game==="euro")possible=mainHits>=2||(mainHits>=1&&extraHits>=2);else possible=mainHits>=2||extraHits>=1;$("#gainText").innerHTML=`<span class="${possible?"gain-ok":"gain-no"}">${possible?"✅ Correspondance détectée":"❌ Aucune correspondance suffisante"}</span><br>${mainHits} numéro(s) trouvé(s)<br>${extraHits} ${c.extraName.toLowerCase()} trouvé(s)<br>Résultat indicatif : montant et validité à vérifier sur la source officielle ou sur ton reçu.`;openTab("gain");toast("Vérification terminée 🔎")}
     function openTab(id){$$(".panel-tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===id));$$(".section").forEach(s=>s.classList.toggle("active",s.id===id))}
     function saveHistory(grid){state.history.unshift({...grid,createdAt:new Date().toISOString()});state.history=state.history.slice(0,40);saveState()}
-    function renderHistory(){const items=state.history.filter(g=>g.game===game);if(!items.length){$("#historyList").innerHTML=`<p style="color:#6c7280;">Aucune grille pour le moment.</p>`;return}$("#historyList").innerHTML=items.map(g=>{const c=CONFIG[g.game];const icon=g.type==="Premium"?"✨":"🎲";const score=g.score?` · ${g.score}/99`:"";return`<div class="history-item">${icon} ${g.type}${score} · ${c.name} : ${g.main.join(" - ")} | ${g.extra.join(" - ")}</div>`}).join("")}
+    function renderHistory(){const items=state.history.filter(g=>g.game===game);if(!items.length){$("#historyList").innerHTML=`<p style="color:#6c7280;">Aucune grille pour le moment.</p>`;return}$("#historyList").innerHTML=items.map(g=>{const c=CONFIG[g.game];const icon=g.type==="Premium"?"✨":"🎲";const score=g.score?` · ${g.score}/99`:"";return`<div class="history-item">${icon} ${g.type}${score}${g.profileLabel?" · "+g.profileLabel:""} · ${c.name} : ${g.main.join(" - ")} | ${g.extra.join(" - ")}</div>`}).join("")}
     function clearHistory(){if(!confirm("Effacer l’historique ?"))return;state.history=[];saveState();renderHistory();renderStats();toast("Historique effacé")}
     function editReference(){const c=CONFIG[game];const old=getReference();const mainRaw=prompt(`Entre les ${c.mainCount} numéros officiels séparés par espace`,old?old.main.join(" "):"");if(!mainRaw)return;const extraRaw=prompt(`Entre ${c.extraCount} ${c.extraName.toLowerCase()} séparé(s) par espace`,old?old.extra.join(" "):"");if(!extraRaw)return;const main=parseNums(mainRaw,c.mainCount,c.mainMax);const extra=parseNums(extraRaw,c.extraCount,c.extraMax);if(!main||!extra){toast("Format incorrect");return}state.references[game]={main,extra};saveState();renderReference();renderStats();toast("Résultat officiel saisi")}
     function parseNums(raw,count,max){const nums=raw.split(/[\s,;.-]+/).map(v=>Number(v.trim())).filter(Number.isInteger);const unique=[...new Set(nums)].sort((a,b)=>a-b);if(unique.length!==count)return null;if(unique.some(n=>n<1||n>max))return null;return unique}
     function copyGrid(){if(!currentGrid)return toast("Aucune grille à copier.");const c=CONFIG[currentGrid.game];const text=`${c.name} : ${currentGrid.main.join(" - ")} | ${c.extraName} : ${currentGrid.extra.join(" - ")} — Aucun gain garanti.`;navigator.clipboard.writeText(text).then(()=>toast("Grille copiée 📋")).catch(()=>toast(text))}
     function shareWhatsapp(){if(!currentGrid)return toast("Aucune grille à partager.");const c=CONFIG[currentGrid.game];const text=encodeURIComponent(`${c.name} : ${currentGrid.main.join(" - ")} | ${c.extraName} : ${currentGrid.extra.join(" - ")}\nGénéré avec Euroloto Galactic. Aucun gain garanti.`);window.open(`https://wa.me/?text=${text}`,"_blank")}
-    function copyLegal(){const text="Euroloto Galactic est une application indépendante, non affiliée à la FDJ. Les numéros sont générés aléatoirement. Aucun tirage, score, statistique, algorithme ou système ne garantit un gain.";navigator.clipboard.writeText(text).then(()=>toast("Avertissement copié")).catch(()=>toast(text))}
+    function copyLegal(){const text="Euroloto Galactic est une application indépendante, non affiliée à la FDJ. Les numéros sont générés aléatoirement ou optimisés par des filtres statistiques privés. Aucun tirage, score, statistique, algorithme ou système ne garantit un gain.";navigator.clipboard.writeText(text).then(()=>toast("Avertissement copié")).catch(()=>toast(text))}
     function unlockPremium(callback){if(state.premium){toast("Smart+ déjà activé");if(typeof callback==="function")callback();return}const code=prompt("Code Premium");if(!code)return;if(code.trim().toLowerCase()!==PREMIUM_CODE){toast("Code Premium incorrect");return}state.premium=true;saveState();renderSmartBadge();toast("Smart+ activé ✅");if(typeof callback==="function")setTimeout(callback,300)}
     function updateTimer(){const c=CONFIG[game];const next=getNextDraw();const diff=next.getTime()-Date.now();if(diff<=0){$("#d").textContent="0";$("#h").textContent="0";$("#m").textContent="0";$("#s").textContent="0";return}const total=Math.floor(diff/1000);const days=Math.floor(total/86400);const hours=Math.floor((total%86400)/3600);const minutes=Math.floor((total%3600)/60);const seconds=total%60;$("#d").textContent=days;$("#h").textContent=hours;$("#m").textContent=minutes;$("#s").textContent=seconds;$("#drawText").textContent=`Prochain tirage : ${formatDrawDate(next)} vers ${pad(c.drawHour)}:${pad(c.drawMinute)}`}
     function getNextDraw(){const c=CONFIG[game];const now=new Date();for(let add=0;add<10;add++){const d=new Date(now);d.setDate(now.getDate()+add);d.setHours(c.drawHour,c.drawMinute,0,0);if(c.drawDays.includes(d.getDay())&&d.getTime()>now.getTime())return d}const fallback=new Date(now);fallback.setDate(now.getDate()+1);fallback.setHours(c.drawHour,c.drawMinute,0,0);return fallback}
