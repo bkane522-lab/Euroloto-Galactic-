@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#061950" />
   <meta name="description" content="Euroloto Galactic : générateur indépendant de grilles EuroMillions et Loto avec Classique, Smart+, timer, stats chaud/froid, historique et vérification indicative et Premium privé V1.4 avec résultats auto." />
-  <title>Euroloto Galactic V1.4.1</title>
+  <title>Euroloto Galactic V1.4.2</title>
   <link rel="manifest" href="/manifest.json" />
   <link rel="apple-touch-icon" href="/icon-192.png" />
   <style>
@@ -36,7 +36,7 @@
   </style>
 
   <style id="compact-mobile-v113">
-    /* V1.4.1 Auto Only: remonte les boutons pour éviter la barre Android */
+    /* V1.4.2 Buttons Hotfix: remonte les boutons pour éviter la barre Android */
     .app {
       padding: 9px 12px calc(8px + env(safe-area-inset-bottom));
     }
@@ -153,7 +153,7 @@
 
 
   <style id="mini-panel-v112">
-    /* V1.4.1 Auto Only : le bouton Modifier reste visible sans scroll */
+    /* V1.4.2 Buttons Hotfix : le bouton Modifier reste visible sans scroll */
     .panel {
       min-height: 150px;
     }
@@ -295,7 +295,7 @@
 
   </style>
   <style id="apk-polish-v121">
-    /* V1.4.1 Auto Only : logo V3 premium intégré */
+    /* V1.4.2 Buttons Hotfix : logo V3 premium intégré */
     .app-icon {
       overflow: hidden;
       padding: 0;
@@ -608,7 +608,7 @@
         <div class="section" id="history"><div class="box"><h4>📜 Historique</h4><div id="historyList"></div><button class="clear-btn" id="clearHistoryBtn">🧹 Effacer</button></div></div><div class="section" id="infos"><div class="box info-mini"><h4>ℹ️ Infos</h4><p class="info-line">App indépendante.</p><p class="info-line">Résultats : auto.</p><p class="info-line">Premium : moteur privé.</p><p class="info-line">Score Smart+ : indicatif.</p><p class="legal-line">Aucun gain garanti.</p><button class="clear-btn copy-mini-btn" id="copyLegalBtn">Copier l’avertissement</button></div></div>
       </div>
     </section>
-    <p class="footer">Application indépendante, non affiliée à la FDJ.<br>Numéros générés aléatoirement. Aucun gain garanti. V1.4.1 Auto Only</p>
+    <p class="footer">Application indépendante, non affiliée à la FDJ.<br>Numéros générés aléatoirement. Aucun gain garanti. V1.4.2 Buttons Hotfix</p>
   </main>
   <div class="toast" id="toast"></div>
   <script>
@@ -618,13 +618,39 @@
     function init(){bind();initInstall();renderGame();renderHistory();renderStats();updateTimer();setInterval(updateTimer,1000);registerSW();setTimeout(()=>loadAutoReference(game,false),500)}
     function loadState(){const empty={premium:false,history:[],references:{}};try{let raw=localStorage.getItem(STORAGE_KEY);if(!raw){for(const key of LEGACY_KEYS){raw=localStorage.getItem(key);if(raw)break}}if(!raw)return empty;const data=JSON.parse(raw);const clean={premium:Boolean(data.premium),history:Array.isArray(data.history)?data.history:[],references:data.references||{}};localStorage.setItem(STORAGE_KEY,JSON.stringify(clean));return clean}catch{return empty}}
     function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
-    function bind(){$("#euroBtn").onclick=()=>switchGame("euro");$("#lotoBtn").onclick=()=>switchGame("loto");$("#classicBtn").onclick=()=>generateClassic();$("#premiumBtn").onclick=()=>generatePremium();$("#smartBtn").onclick=()=>unlockPremium();$("#installBtn").onclick=installApp;$("#copyBtn").onclick=copyGrid;$("#waBtn").onclick=shareWhatsapp;$("#verifyBtn").onclick=verifyGrid;$("#autoReferenceBtn").onclick=()=>loadAutoReference(game,true);$("#clearHistoryBtn").onclick=clearHistory;$("#copyLegalBtn").onclick=copyLegal;$$(".panel-tab").forEach(btn=>{btn.onclick=()=>openTab(btn.dataset.tab)})}
+    function bind(){
+      const set=(sel,fn)=>{const el=$(sel); if(el) el.onclick=fn};
+      set("#euroBtn",()=>switchGame("euro"));
+      set("#lotoBtn",()=>switchGame("loto"));
+      set("#classicBtn",()=>generateClassic());
+      set("#premiumBtn",()=>generatePremium());
+      set("#smartBtn",()=>unlockPremium());
+      set("#installBtn",installApp);
+      set("#copyBtn",copyGrid);
+      set("#waBtn",shareWhatsapp);
+      set("#verifyBtn",verifyGrid);
+      set("#autoReferenceBtn",()=>loadAutoReference(game,true));
+      set("#clearHistoryBtn",clearHistory);
+      set("#copyLegalBtn",copyLegal);
+      $$(".panel-tab").forEach(btn=>{btn.onclick=()=>openTab(btn.dataset.tab)})
+    }
     function switchGame(next){game=next;$("#euroBtn").classList.toggle("active",game==="euro");$("#lotoBtn").classList.toggle("active",game==="loto");renderGame();renderStats();renderHistory();updateTimer();setTimeout(()=>loadAutoReference(game,false),250)}
     function renderGame(){const c=CONFIG[game];$("#gameTitle").textContent=c.name;$("#formatBadge").textContent=c.format;$("#extraLabel").textContent=c.extraName;if(!currentGrid||currentGrid.game!==game)currentGrid=buildClassicGrid();renderBalls(currentGrid);renderReference();renderSmartBadge();renderScorePill()}
     function renderSmartBadge(){$("#smartBtn").textContent=state.premium?"Smart+":"Smart"}
     function renderBalls(grid){$("#mainBalls").innerHTML=grid.main.map(n=>`<div class="ball">${n}</div>`).join("");$("#extraBalls").innerHTML=grid.extra.map(n=>`<div class="ball extra-ball">${n}</div>`).join("")}
     function getReference(){const c=CONFIG[game];const saved=state.references[game];if(saved&&Array.isArray(saved.main)&&Array.isArray(saved.extra)&&saved.main.length===c.mainCount&&saved.extra.length===c.extraCount)return saved;return null}
-    function renderReference(){const c=CONFIG[game];const ref=getReference();if(!ref){$("#referenceText").textContent=`${c.name} · chargement auto`;$("#referenceChips").innerHTML=`<span class="chip placeholder-chip">Auto…</span>`;return}const date=ref.date?` · ${ref.date}`:"";$("#referenceText").innerHTML=`${c.name} · <span class="ref-source">Auto</span>${date}`;$("#referenceChips").innerHTML=ref.main.map(n=>`<span class="chip">${n}</span>`).join("")+ref.extra.map(n=>`<span class="chip hot">${n}</span>`).join("")}
+    function renderReference(){
+      const c=CONFIG[game];
+      const ref=getReference();
+      if(!ref){
+        $("#referenceText").textContent=`${c.name} · résultat automatique`;
+        $("#referenceChips").innerHTML=`<span class="chip placeholder-chip">Auto…</span>`;
+        return;
+      }
+      const date=ref.date?` · ${ref.date}`:"";
+      $("#referenceText").innerHTML=`${c.name} · <span class="ref-source">Auto</span>${date}`;
+      $("#referenceChips").innerHTML=ref.main.map(n=>`<span class="chip">${n}</span>`).join("")+ref.extra.map(n=>`<span class="chip hot">${n}</span>`).join("");
+    }
     function generateClassic(){currentGrid=buildClassicGrid();currentGrid.score=scoreGrid(currentGrid).score;saveHistory(currentGrid);renderBalls(currentGrid);renderScorePill();renderHistory();renderStats();toast("Grille classique générée 🎲")}
     function generatePremium(){if(!state.premium){unlockPremium(()=>generatePremium());return}let best=null;for(let i=0;i<PREMIUM_SIMULATIONS;i++){const candidate=buildClassicGrid();candidate.type="Premium";candidate.engine="V1.3";candidate.profile=premiumProfileFor(i);const result=scoreGrid(candidate,candidate.profile);candidate.score=result.score;candidate.reason=result.reason;candidate.profileLabel=result.profileLabel;if(!best||candidate.score>best.score||(candidate.score===best.score&&tieBreaker(candidate)>tieBreaker(best)))best=candidate}currentGrid=best;saveHistory(currentGrid);renderBalls(currentGrid);renderScorePill();renderHistory();renderStats();toast("Premium généré ✨")}
     function premiumProfileFor(i){const profiles=["balanced","hotcold","coverage","antirepeat"];return profiles[i%profiles.length]}function profileLabel(key){return"Privé"}function tieBreaker(grid){const gaps=[];for(let i=1;i<grid.main.length;i++)gaps.push(grid.main[i]-grid.main[i-1]);const range=grid.main[grid.main.length-1]-grid.main[0];const decadeSpread=new Set(grid.main.map(n=>Math.floor((n-1)/10))).size;return range+decadeSpread*6+gaps.reduce((a,b)=>a+b,0)}function scoreGrid(grid,profileKey){const c=CONFIG[grid.game];const profile=getProfile(grid.game);profileKey=profileKey||grid.profile||"balanced";const weights={balanced:{pair:14,low:14,sum:18,gaps:8,range:8,spread:9,hot:10,cold:8,extra:5,repeat:10},hotcold:{pair:10,low:10,sum:14,gaps:7,range:7,spread:7,hot:19,cold:13,extra:4,repeat:8},coverage:{pair:11,low:11,sum:14,gaps:11,range:13,spread:15,hot:7,cold:7,extra:4,repeat:7},antirepeat:{pair:12,low:12,sum:15,gaps:8,range:8,spread:8,hot:8,cold:8,extra:4,repeat:19}}[profileKey]||{pair:14,low:14,sum:18,gaps:8,range:8,spread:9,hot:10,cold:8,extra:5,repeat:10};let score=28;const reason=[];const odds=grid.main.filter(n=>n%2!==0).length;const lows=grid.main.filter(n=>n<=Math.floor(c.mainMax/2)).length;const sum=grid.main.reduce((a,b)=>a+b,0);const gaps=[];for(let i=1;i<grid.main.length;i++)gaps.push(grid.main[i]-grid.main[i-1]);const consecutive=gaps.filter(g=>g===1).length;const averageGap=gaps.reduce((a,b)=>a+b,0)/gaps.length;const range=grid.main[grid.main.length-1]-grid.main[0];const decadeSpread=new Set(grid.main.map(n=>Math.floor((n-1)/10))).size;if(odds===2||odds===3){score+=weights.pair;reason.push("équilibre pair/impair")}if(lows===2||lows===3){score+=weights.low;reason.push("équilibre petits/grands")}const minSum=grid.game==="euro"?105:100;const maxSum=grid.game==="euro"?185:170;const idealMin=grid.game==="euro"?118:108;const idealMax=grid.game==="euro"?172:162;if(sum>=idealMin&&sum<=idealMax){score+=weights.sum;reason.push("somme forte")}else if(sum>=minSum&&sum<=maxSum){score+=Math.floor(weights.sum*.55);reason.push("somme acceptable")}if(consecutive===0){score+=weights.gaps;reason.push("aucune suite")}else if(consecutive===1){score+=Math.floor(weights.gaps*.65);reason.push("peu de suites")}if(averageGap>=5){score+=Math.floor(weights.gaps*.55);reason.push("écarts corrects")}if(range>=28){score+=weights.range;reason.push("bonne amplitude")}else if(range>=22){score+=Math.floor(weights.range*.6);reason.push("amplitude correcte")}if(decadeSpread>=4){score+=weights.spread;reason.push("large couverture")}else if(decadeSpread>=3){score+=Math.floor(weights.spread*.72);reason.push("répartition par dizaines")}const hotHits=grid.main.filter(n=>profile.hot.includes(n)).length;const coldHits=grid.main.filter(n=>profile.cold.includes(n)).length;if(hotHits>=1&&hotHits<=3){score+=weights.hot;reason.push("mix numéros chauds")}if(coldHits>=1&&coldHits<=2){score+=weights.cold;reason.push("mix numéros froids")}if(grid.extra.length===2){const extraSum=grid.extra.reduce((a,b)=>a+b,0);if(extraSum>=5&&extraSum<=18){score+=weights.extra;reason.push("étoiles équilibrées")}}else{score+=Math.floor(weights.extra*.7)}const dateBias=grid.main.filter(n=>n<=31).length;if(dateBias>=5)score-=8;else if(dateBias===4)score-=3;const lastDigitSpread=new Set(grid.main.map(n=>n%10)).size;if(lastDigitSpread>=4)score+=4;const roundBias=grid.main.filter(n=>n%10===0||n%5===0).length;if(roundBias>=3)score-=5;const edgeMix=grid.main.some(n=>n<=10)&&grid.main.some(n=>n>=40);if(edgeMix)score+=4;const repetitionPenalty=countSimilarHistory(grid);score-=repetitionPenalty*6;if(repetitionPenalty===0){score+=weights.repeat;reason.push("anti-répétition historique")}return{score:Math.max(1,Math.min(99,score)),reason,profileLabel:profileLabel(profileKey)}}
@@ -660,7 +686,26 @@
       }
     }
 
-    async async function verifyGrid(){if(!currentGrid||currentGrid.game!==game){toast("Génère d’abord une grille.");return}const c=CONFIG[game];let ref=getReference();if(!ref){openTab("tirage");toast("Chargement du résultat...");const ok=await loadAutoReference(game,true);ref=getReference();if(!ok||!ref){toast("Résultat auto indisponible.");return}}const mainHits=currentGrid.main.filter(n=>ref.main.includes(n)).length;const extraHits=currentGrid.extra.filter(n=>ref.extra.includes(n)).length;let possible=false;if(game==="euro")possible=mainHits>=2||(mainHits>=1&&extraHits>=2);else possible=mainHits>=2||extraHits>=1;$("#gainText").innerHTML=`<span class="${possible?"gain-ok":"gain-no"}">${possible?"✅ Correspondance détectée":"❌ Aucune correspondance suffisante"}</span><br>${mainHits} numéro(s) trouvé(s)<br>${extraHits} ${c.extraName.toLowerCase()} trouvé(s)<br>Résultat indicatif. Vérifie toujours ton reçu.`;openTab("gain");toast("Vérification terminée 🔎")}
+    async function verifyGrid(){
+      if(!currentGrid||currentGrid.game!==game){toast("Génère d’abord une grille.");return}
+      const c=CONFIG[game];
+      let ref=getReference();
+      if(!ref){
+        openTab("tirage");
+        toast("Résultat en cours...");
+        const ok=await loadAutoReference(game,true);
+        ref=getReference();
+        if(!ok||!ref){toast("Résultat auto indisponible.");return}
+      }
+      const mainHits=currentGrid.main.filter(n=>ref.main.includes(n)).length;
+      const extraHits=currentGrid.extra.filter(n=>ref.extra.includes(n)).length;
+      let possible=false;
+      if(game==="euro") possible=mainHits>=2||(mainHits>=1&&extraHits>=2);
+      else possible=mainHits>=2||extraHits>=1;
+      $("#gainText").innerHTML=`<span class="${possible?"gain-ok":"gain-no"}">${possible?"✅ Correspondance détectée":"❌ Aucune correspondance suffisante"}</span><br>${mainHits} numéro(s) trouvé(s)<br>${extraHits} ${c.extraName.toLowerCase()} trouvé(s)<br>Résultat indicatif. Vérifie ton reçu.`;
+      openTab("gain");
+      toast("Vérification terminée 🔎");
+    }
     function openTab(id){$$(".panel-tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===id));$$(".section").forEach(s=>s.classList.toggle("active",s.id===id))}
     function saveHistory(grid){state.history.unshift({...grid,createdAt:new Date().toISOString()});state.history=state.history.slice(0,40);saveState()}
     function renderHistory(){const items=state.history.filter(g=>g.game===game);if(!items.length){$("#historyList").innerHTML=`<p style="color:#6c7280;">Aucune grille pour le moment.</p>`;return}$("#historyList").innerHTML=items.map(g=>{const c=CONFIG[g.game];const icon=g.type==="Premium"?"✨":"🎲";const score=g.score?` · ${g.score}/99`:"";return`<div class="history-item">${icon} ${g.type}${score} · ${c.name} : ${g.main.join(" - ")} | ${g.extra.join(" - ")}</div>`}).join("")}
