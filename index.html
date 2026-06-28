@@ -4,1469 +4,241 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#061950" />
-  <meta name="description" content="Euroloto Galactic : générateur indépendant de grilles EuroMillions et Loto avec Classique, Smart+, timer, statistiques chaud/froid, historique et vérification indicative." />
-  <title>Euroloto Galactic V1.1</title>
-
+  <meta name="description" content="Euroloto Galactic : générateur indépendant de grilles EuroMillions et Loto avec Classique, Smart+, timer, stats chaud/froid, historique et vérification indicative." />
+  <title>Euroloto Galactic V1.1.1</title>
   <link rel="manifest" href="/manifest.json" />
   <link rel="apple-touch-icon" href="/icon-192.png" />
-
   <style>
-    :root {
-      --navy: #061950;
-      --navy2: #020817;
-      --blue: #006bff;
-      --gold: #ffd84d;
-      --text: #071b4d;
-      --muted: #697386;
-      --white: #ffffff;
-      --green: #16c66a;
-      --dark: #07142f;
-      --purple: #9b5cff;
-      --danger: #ef3e5c;
-      --line: #dfe7f4;
-      --shadow: 0 16px 45px rgba(0,0,0,.24);
-    }
+    :root{--navy:#061950;--navy2:#020817;--blue:#006bff;--gold:#ffd84d;--text:#071b4d;--muted:#697386;--white:#fff;--soft:#f3f6fb;--green:#16c66a;--dark:#07142f;--purple:#9b5cff;--danger:#ef3e5c;--line:#dfe7f4;--shadow:0 16px 45px rgba(0,0,0,.24)}
+    *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+    html,body{height:100%;background:var(--navy2);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow:hidden}
+    body{color:var(--white);background:radial-gradient(circle at 18% 0%,rgba(255,216,77,.24),transparent 26%),radial-gradient(circle at 84% 14%,rgba(0,107,255,.28),transparent 32%),radial-gradient(circle at 40% 80%,rgba(155,92,255,.16),transparent 42%),linear-gradient(180deg,#06276b 0%,#020817 68%)}
+    .stars{position:fixed;inset:0;pointer-events:none;background-image:radial-gradient(circle,rgba(255,255,255,.75) 1px,transparent 1px),radial-gradient(circle,rgba(255,255,255,.35) 1px,transparent 1px);background-size:80px 80px,130px 130px;opacity:.22}
+    .app{position:relative;z-index:1;height:100dvh;max-width:720px;margin:0 auto;display:flex;flex-direction:column;overflow:hidden;padding:14px 14px calc(14px + env(safe-area-inset-bottom))}
+    .hero{flex:0 0 auto;background:radial-gradient(circle at 90% 10%,rgba(255,216,77,.20),transparent 25%),linear-gradient(135deg,#0a3288,#061950 65%);border-radius:0 0 34px 34px;margin:-14px -14px 14px;padding:18px 16px 20px;box-shadow:var(--shadow);min-height:188px}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{display:flex;align-items:center;gap:12px;min-width:0}
+    .app-icon{width:58px;height:58px;border-radius:16px;background:radial-gradient(circle at 30% 20%,#fff,#ffd84d 12%,#9b5cff 36%,#061950 80%);box-shadow:0 0 24px rgba(255,216,77,.45);display:grid;place-items:center;font-size:30px;flex:0 0 58px}
+    .brand h1{font-size:1.26rem;line-height:1.02;letter-spacing:1px;font-weight:950;text-transform:uppercase}.brand p{margin-top:4px;font-weight:800;color:rgba(255,255,255,.82);font-size:.86rem}
+    .top-actions{display:grid;gap:8px;justify-items:end}.smart-badge,.install-badge{border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:11px 14px;background:rgba(255,255,255,.18);color:var(--gold);font-weight:950;box-shadow:inset 0 1px 12px rgba(255,255,255,.12);cursor:pointer;white-space:nowrap}.install-badge{display:none;color:#071b4d;background:linear-gradient(135deg,#ffd84d,#fff0a8);border:0;font-size:.82rem;padding:8px 12px}.install-badge.show{display:inline-block}
+    .tagline{margin-top:16px}.tagline small{display:block;font-weight:900;color:rgba(255,255,255,.9);font-size:.98rem}.tagline h2{margin-top:4px;color:var(--gold);font-size:clamp(1.95rem,8vw,3.25rem);line-height:.95;letter-spacing:1px;font-weight:950;text-transform:uppercase}.tagline strong{display:block;margin-top:4px;letter-spacing:3px;font-size:1rem}.tagline p{margin-top:9px;color:rgba(255,255,255,.82);font-size:.9rem;line-height:1.35}
+    .game-tabs{flex:0 0 auto;display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}button{font:inherit;cursor:pointer}.game-tab{border:0;border-radius:999px;padding:14px 10px;background:rgba(255,255,255,.15);color:rgba(255,255,255,.65);font-size:1rem;font-weight:950}.game-tab.active{background:var(--white);color:var(--text);box-shadow:var(--shadow)}
+    .main-card{flex:0 0 auto;background:linear-gradient(180deg,#f9fbff,#eef3fa);color:var(--text);border-radius:30px;padding:16px;box-shadow:var(--shadow);margin-bottom:12px}
+    .card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px}.card-head h3{font-size:1.48rem;line-height:1;font-weight:950}.badge{border-radius:999px;padding:8px 12px;background:#eef3ff;color:#0846a0;font-weight:950;font-size:.96rem;white-space:nowrap}.draw-text{color:var(--muted);font-weight:850;margin-bottom:11px;font-size:.92rem}
+    .countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:12px}.time-box{border:1px solid var(--line);border-radius:16px;padding:10px 5px;text-align:center;background:#f7f9fd}.time-box strong{display:block;font-size:1.42rem;line-height:1;font-weight:950;color:var(--text)}.time-box small{display:block;margin-top:5px;font-size:.61rem;letter-spacing:1px;font-weight:950;color:var(--muted)}
+    .label{text-align:center;color:var(--muted);letter-spacing:4px;font-size:.78rem;font-weight:950;margin:7px 0 9px}.balls{display:flex;justify-content:center;flex-wrap:wrap;gap:9px}.ball{width:50px;height:50px;border-radius:999px;display:grid;place-items:center;background:#fff;color:var(--text);font-weight:950;font-size:1.2rem;box-shadow:0 8px 18px rgba(7,27,77,.13)}.extra-ball{width:52px;height:52px;border:4px solid var(--gold);background:#fffdf4;box-shadow:0 0 24px rgba(255,216,77,.28)}
+    .score-pill{display:none;width:fit-content;margin:12px auto 0;border-radius:999px;padding:8px 13px;background:#eef3ff;color:#0846a0;font-weight:950;font-size:.88rem}.score-pill.show{display:block}.action-grid{margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:11px}.action-grid.second{grid-template-columns:1fr 1fr 1fr;margin-top:11px}.btn{border:0;border-radius:18px;padding:14px 8px;font-weight:950;font-size:.98rem}.btn-blue{background:linear-gradient(135deg,#0057e6,#0094ff);color:white}.btn-premium{background:linear-gradient(135deg,#a95cff,#ffd84d);color:var(--text)}.btn-white{background:white;color:var(--text);box-shadow:0 6px 16px rgba(7,27,77,.08)}.btn-green{background:linear-gradient(135deg,#12a85c,#18d874);color:white}.btn-dark{background:var(--dark);color:white}
+    .panel{flex:1 1 auto;min-height:0;background:linear-gradient(180deg,#f9fbff,#eef3fa);color:var(--text);border-radius:30px;padding:14px;box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden}.panel-tabs{flex:0 0 auto;display:grid;grid-template-columns:repeat(5,1fr);background:#edf2f9;border-radius:22px;padding:6px;gap:6px;margin-bottom:11px}.panel-tab{border:0;background:transparent;color:var(--muted);border-radius:17px;padding:11px 4px;font-weight:950;font-size:.84rem}.panel-tab.active{background:white;color:var(--text);box-shadow:0 5px 14px rgba(7,27,77,.08)}.panel-content{flex:1 1 auto;min-height:0;overflow:auto;padding-right:3px}.section{display:none}.section.active{display:block}
+    .box{background:#f9fbff;border:1px solid #e1e8f3;border-radius:21px;padding:15px}.box h4{font-size:1.22rem;margin-bottom:9px;font-weight:950}.box p{color:var(--muted);line-height:1.45;font-size:.94rem}.chips{display:flex;flex-wrap:wrap;gap:8px;margin:11px 0 10px}.chip{border-radius:999px;padding:9px 13px;font-weight:950;background:white;border:1px solid #e0e7f3;color:var(--text)}.chip.hot{border-color:#f7db68;background:#fff9db}.chip.cold{border-color:#bce5ff;background:#ecf8ff}
+    .history-item{color:var(--muted);padding:10px 0;border-bottom:1px solid #e1e8f3;font-size:.94rem;line-height:1.35}.history-item:last-child{border-bottom:0}.clear-btn{width:100%;margin-top:12px;border:1px solid #dfe7f4;border-radius:17px;padding:13px;background:white;color:var(--text);font-weight:950;font-size:.96rem}.gain-ok{color:var(--green);font-weight:950}.gain-no{color:var(--danger);font-weight:950}.footer{flex:0 0 auto;color:rgba(255,255,255,.58);text-align:center;font-size:.78rem;line-height:1.35;padding-top:9px}
+    .toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);z-index:50;background:var(--text);color:white;border-radius:999px;padding:13px 20px;font-weight:950;opacity:0;pointer-events:none;transition:.25s;box-shadow:var(--shadow);max-width:calc(100% - 40px);text-align:center}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    @media(max-height:780px){.hero{min-height:145px;padding-bottom:15px}.tagline h2{font-size:1.88rem}.tagline p{display:none}.main-card{padding:13px}.ball{width:44px;height:44px;font-size:1.05rem}.extra-ball{width:46px;height:46px}.btn{padding:12px 8px;font-size:.9rem}.time-box{padding:8px 4px}}
+    @media(max-width:420px){.app{padding-left:10px;padding-right:10px}.hero{margin-left:-10px;margin-right:-10px}.brand h1{font-size:1.08rem}.brand p{font-size:.78rem}.smart-badge{padding:9px 12px}.install-badge{padding:7px 10px}.ball{width:42px;height:42px}.extra-ball{width:46px;height:46px}.action-grid.second{gap:7px}.btn{font-size:.84rem}.panel-tab{font-size:.70rem}}
+  </style>
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    html,
-    body {
-      height: 100%;
-      background: var(--navy2);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      overflow: hidden;
-    }
-
-    body {
-      color: var(--white);
-      background:
-        radial-gradient(circle at 18% 0%, rgba(255,216,77,.24), transparent 26%),
-        radial-gradient(circle at 84% 14%, rgba(0,107,255,.28), transparent 32%),
-        radial-gradient(circle at 40% 80%, rgba(155,92,255,.16), transparent 42%),
-        linear-gradient(180deg, #06276b 0%, #020817 68%);
-    }
-
-    .stars {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background-image:
-        radial-gradient(circle, rgba(255,255,255,.75) 1px, transparent 1px),
-        radial-gradient(circle, rgba(255,255,255,.35) 1px, transparent 1px);
-      background-size: 80px 80px, 130px 130px;
-      opacity: .22;
-    }
-
+  <style id="compact-mobile-v111">
+    /* V1.1.1 Compact Mobile: remonte les boutons pour éviter la barre Android */
     .app {
-      position: relative;
-      z-index: 1;
-      height: 100dvh;
-      max-width: 720px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      padding: 14px 14px calc(14px + env(safe-area-inset-bottom));
+      padding: 9px 12px calc(8px + env(safe-area-inset-bottom));
     }
-
     .hero {
-      flex: 0 0 auto;
-      background:
-        radial-gradient(circle at 90% 10%, rgba(255,216,77,.20), transparent 25%),
-        linear-gradient(135deg, #0a3288, #061950 65%);
-      border-radius: 0 0 34px 34px;
-      margin: -14px -14px 14px;
-      padding: 18px 16px 20px;
-      box-shadow: var(--shadow);
-      min-height: 188px;
+      min-height: 154px;
+      margin: -9px -12px 9px;
+      padding: 14px 14px 15px;
+      border-radius: 0 0 28px 28px;
     }
-
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      min-width: 0;
-    }
-
     .app-icon {
-      width: 58px;
-      height: 58px;
-      border-radius: 16px;
-      background:
-        radial-gradient(circle at 30% 20%, #fff, #ffd84d 12%, #9b5cff 36%, #061950 80%);
-      box-shadow: 0 0 24px rgba(255,216,77,.45);
-      display: grid;
-      place-items: center;
-      font-size: 30px;
-      flex: 0 0 58px;
-    }
-
-    .brand h1 {
-      font-size: 1.26rem;
-      line-height: 1.02;
-      letter-spacing: 1px;
-      font-weight: 950;
-      text-transform: uppercase;
-    }
-
-    .brand p {
-      margin-top: 4px;
-      font-weight: 800;
-      color: rgba(255,255,255,.82);
-      font-size: .86rem;
-    }
-
-    .top-actions {
-      display: grid;
-      gap: 8px;
-      justify-items: end;
-    }
-
-    .smart-badge,
-    .install-badge {
-      border: 1px solid rgba(255,255,255,.35);
-      border-radius: 999px;
-      padding: 10px 13px;
-      background: rgba(255,255,255,.18);
-      color: var(--gold);
-      font-weight: 950;
-      box-shadow: inset 0 1px 12px rgba(255,255,255,.12);
-      cursor: pointer;
-      white-space: nowrap;
-      font-size: .92rem;
-    }
-
-    .install-badge {
-      display: none;
-      color: #071b4d;
-      background: linear-gradient(135deg, #ffd84d, #fff0a8);
-      border: 0;
-      font-size: .82rem;
-      padding: 8px 12px;
-    }
-
-    .install-badge.show {
-      display: inline-block;
-    }
-
-    .tagline {
-      margin-top: 16px;
-    }
-
-    .tagline small {
-      display: block;
-      font-weight: 900;
-      color: rgba(255,255,255,.9);
-      font-size: .98rem;
-    }
-
-    .tagline h2 {
-      margin-top: 4px;
-      color: var(--gold);
-      font-size: clamp(1.95rem, 8vw, 3.25rem);
-      line-height: .95;
-      letter-spacing: 1px;
-      font-weight: 950;
-      text-transform: uppercase;
-    }
-
-    .tagline strong {
-      display: block;
-      margin-top: 4px;
-      letter-spacing: 3px;
-      font-size: 1rem;
-    }
-
-    .tagline p {
-      margin-top: 9px;
-      color: rgba(255,255,255,.82);
-      font-size: .9rem;
-      line-height: 1.35;
-    }
-
-    .game-tabs {
-      flex: 0 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-
-    button {
-      font: inherit;
-      cursor: pointer;
-    }
-
-    .game-tab {
-      border: 0;
-      border-radius: 999px;
-      padding: 14px 10px;
-      background: rgba(255,255,255,.15);
-      color: rgba(255,255,255,.65);
-      font-size: 1rem;
-      font-weight: 950;
-    }
-
-    .game-tab.active {
-      background: var(--white);
-      color: var(--text);
-      box-shadow: var(--shadow);
-    }
-
-    .main-card {
-      flex: 0 0 auto;
-      background: linear-gradient(180deg, #f9fbff, #eef3fa);
-      color: var(--text);
-      border-radius: 30px;
-      padding: 16px;
-      box-shadow: var(--shadow);
-      margin-bottom: 12px;
-    }
-
-    .card-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 12px;
-      margin-bottom: 10px;
-    }
-
-    .card-head h3 {
-      font-size: 1.48rem;
-      line-height: 1;
-      font-weight: 950;
-    }
-
-    .badge {
-      border-radius: 999px;
-      padding: 8px 12px;
-      background: #eef3ff;
-      color: #0846a0;
-      font-weight: 950;
-      font-size: .96rem;
-      white-space: nowrap;
-    }
-
-    .draw-text {
-      color: var(--muted);
-      font-weight: 850;
-      margin-bottom: 11px;
-      font-size: .92rem;
-    }
-
-    .countdown {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 7px;
-      margin-bottom: 12px;
-    }
-
-    .time-box {
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 10px 5px;
-      text-align: center;
-      background: #f7f9fd;
-    }
-
-    .time-box strong {
-      display: block;
-      font-size: 1.42rem;
-      line-height: 1;
-      font-weight: 950;
-      color: var(--text);
-    }
-
-    .time-box small {
-      display: block;
-      margin-top: 5px;
-      font-size: .61rem;
-      letter-spacing: 1px;
-      font-weight: 950;
-      color: var(--muted);
-    }
-
-    .label {
-      text-align: center;
-      color: var(--muted);
-      letter-spacing: 4px;
-      font-size: .78rem;
-      font-weight: 950;
-      margin: 7px 0 9px;
-    }
-
-    .balls {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 9px;
-    }
-
-    .ball {
       width: 50px;
       height: 50px;
-      border-radius: 999px;
-      display: grid;
-      place-items: center;
-      background: #fff;
-      color: var(--text);
-      font-weight: 950;
-      font-size: 1.2rem;
-      box-shadow: 0 8px 18px rgba(7,27,77,.13);
+      flex-basis: 50px;
+      font-size: 26px;
     }
-
-    .extra-ball {
-      width: 52px;
-      height: 52px;
-      border: 4px solid var(--gold);
-      background: #fffdf4;
-      box-shadow: 0 0 24px rgba(255,216,77,.28);
+    .brand h1 { font-size: 1.08rem; }
+    .brand p { font-size: .78rem; }
+    .smart-badge { padding: 9px 12px; font-size: .86rem; }
+    .install-badge { padding: 7px 11px; font-size: .78rem; }
+    .tagline { margin-top: 12px; }
+    .tagline small { font-size: .88rem; }
+    .tagline h2 {
+      font-size: clamp(1.72rem, 7vw, 2.75rem);
+      line-height: .94;
     }
-
-    .score-pill {
-      display: none;
-      width: fit-content;
-      margin: 12px auto 0;
-      border-radius: 999px;
-      padding: 8px 13px;
-      background: #eef3ff;
-      color: #0846a0;
-      font-weight: 950;
-      font-size: .88rem;
-    }
-
-    .score-pill.show {
-      display: block;
-    }
-
-    .action-grid {
-      margin-top: 16px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 11px;
-    }
-
-    .action-grid.second {
-      grid-template-columns: 1fr 1fr 1fr;
-      margin-top: 11px;
-    }
-
-    .btn {
-      border: 0;
-      border-radius: 18px;
-      padding: 14px 8px;
-      font-weight: 950;
-      font-size: .98rem;
-    }
-
-    .btn-blue {
-      background: linear-gradient(135deg, #0057e6, #0094ff);
-      color: white;
-    }
-
-    .btn-premium {
-      background: linear-gradient(135deg, #a95cff, #ffd84d);
-      color: var(--text);
-    }
-
-    .btn-white {
-      background: white;
-      color: var(--text);
-      box-shadow: 0 6px 16px rgba(7,27,77,.08);
-    }
-
-    .btn-green {
-      background: linear-gradient(135deg, #12a85c, #18d874);
-      color: white;
-    }
-
-    .btn-dark {
-      background: var(--dark);
-      color: white;
-    }
-
-    .panel {
-      flex: 1 1 auto;
-      min-height: 0;
-      background: linear-gradient(180deg, #f9fbff, #eef3fa);
-      color: var(--text);
-      border-radius: 30px;
-      padding: 14px;
-      box-shadow: var(--shadow);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    .panel-tabs {
-      flex: 0 0 auto;
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      background: #edf2f9;
-      border-radius: 22px;
-      padding: 6px;
-      gap: 6px;
-      margin-bottom: 11px;
-    }
-
-    .panel-tab {
-      border: 0;
-      background: transparent;
-      color: var(--muted);
-      border-radius: 17px;
-      padding: 11px 2px;
-      font-weight: 950;
-      font-size: .78rem;
-    }
-
-    .panel-tab.active {
-      background: white;
-      color: var(--text);
-      box-shadow: 0 5px 14px rgba(7,27,77,.08);
-    }
-
-    .panel-content {
-      flex: 1 1 auto;
-      min-height: 0;
-      overflow: auto;
-      padding-right: 3px;
-    }
-
-    .section {
-      display: none;
-    }
-
-    .section.active {
-      display: block;
-    }
-
-    .box {
-      background: #f9fbff;
-      border: 1px solid #e1e8f3;
-      border-radius: 21px;
-      padding: 15px;
-    }
-
-    .box h4 {
-      font-size: 1.18rem;
-      margin-bottom: 9px;
-      font-weight: 950;
-    }
-
-    .box p {
-      color: var(--muted);
-      line-height: 1.45;
-      font-size: .94rem;
-    }
-
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 11px 0 10px;
-    }
-
-    .chip {
-      border-radius: 999px;
-      padding: 9px 13px;
-      font-weight: 950;
-      background: white;
-      border: 1px solid #e0e7f3;
-      color: var(--text);
-    }
-
-    .chip.hot {
-      border-color: #f7db68;
-      background: #fff9db;
-    }
-
-    .chip.cold {
-      border-color: #bce5ff;
-      background: #ecf8ff;
-    }
-
-    .history-item {
-      color: var(--muted);
-      padding: 10px 0;
-      border-bottom: 1px solid #e1e8f3;
-      font-size: .94rem;
-      line-height: 1.35;
-    }
-
-    .history-item:last-child {
-      border-bottom: 0;
-    }
-
-    .clear-btn {
-      width: 100%;
-      margin-top: 12px;
-      border: 1px solid #dfe7f4;
-      border-radius: 17px;
+    .tagline strong { font-size: .94rem; }
+    .tagline p { margin-top: 7px; font-size: .82rem; line-height: 1.3; }
+    .game-tabs { gap: 10px; margin-bottom: 9px; }
+    .game-tab { padding: 11px 8px; font-size: .94rem; }
+    .main-card {
+      border-radius: 26px;
       padding: 13px;
-      background: white;
-      color: var(--text);
-      font-weight: 950;
-      font-size: .96rem;
+      margin-bottom: 9px;
     }
-
-    .gain-ok {
-      color: var(--green);
-      font-weight: 950;
+    .card-head { margin-bottom: 8px; }
+    .card-head h3 { font-size: 1.34rem; }
+    .badge { padding: 7px 11px; font-size: .86rem; }
+    .draw-text { margin-bottom: 8px; font-size: .84rem; line-height: 1.25; }
+    .countdown { gap: 6px; margin-bottom: 8px; }
+    .time-box { padding: 7px 4px; border-radius: 14px; }
+    .time-box strong { font-size: 1.16rem; }
+    .time-box small { margin-top: 4px; font-size: .53rem; }
+    .label { margin: 4px 0 6px; font-size: .70rem; }
+    .balls { gap: 8px; }
+    .ball { width: 42px; height: 42px; font-size: 1rem; }
+    .extra-ball { width: 44px; height: 44px; border-width: 4px; }
+    .score-pill { margin-top: 7px; padding: 7px 12px; font-size: .76rem; }
+    .action-grid { margin-top: 11px; gap: 9px; }
+    .action-grid.second { margin-top: 7px; gap: 7px; }
+    .btn { min-height: 42px; padding: 10px 6px; font-size: .82rem; border-radius: 16px; }
+    .panel {
+      min-height: 82px;
+      border-radius: 22px;
+      padding: 8px;
     }
+    .panel-tabs { padding: 5px; gap: 4px; margin-bottom: 7px; border-radius: 17px; }
+    .panel-tab { padding: 8px 1px; font-size: .63rem; border-radius: 13px; }
+    .box { padding: 11px; border-radius: 17px; }
+    .box h4 { font-size: 1.02rem; margin-bottom: 7px; }
+    .box p { font-size: .83rem; line-height: 1.36; }
+    .footer { display: none; }
 
-    .gain-no {
-      color: var(--danger);
-      font-weight: 950;
-    }
-
-    .footer {
-      flex: 0 0 auto;
-      color: rgba(255,255,255,.58);
-      text-align: center;
-      font-size: .76rem;
-      line-height: 1.35;
-      padding-top: 9px;
-    }
-
-    .toast {
-      position: fixed;
-      left: 50%;
-      bottom: calc(24px + env(safe-area-inset-bottom));
-      transform: translateX(-50%) translateY(20px);
-      z-index: 50;
-      background: var(--text);
-      color: white;
-      border-radius: 999px;
-      padding: 13px 20px;
-      font-weight: 950;
-      opacity: 0;
-      pointer-events: none;
-      transition: .25s;
-      box-shadow: var(--shadow);
-      max-width: calc(100% - 40px);
-      text-align: center;
-    }
-
-    .toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-
-    @media (max-height: 780px) {
+    @media (max-height: 820px) {
+      .app { padding-top: 7px; }
       .hero {
-        min-height: 145px;
-        padding-bottom: 15px;
+        min-height: 132px;
+        margin-top: -7px;
+        margin-bottom: 8px;
+        padding: 11px 14px 12px;
       }
-
-      .tagline h2 {
-        font-size: 1.88rem;
-      }
-
-      .tagline p {
-        display: none;
-      }
-
-      .main-card {
-        padding: 13px;
-      }
-
-      .ball {
-        width: 44px;
-        height: 44px;
-        font-size: 1.05rem;
-      }
-
-      .extra-ball {
-        width: 46px;
-        height: 46px;
-      }
-
-      .btn {
-        padding: 12px 8px;
-        font-size: .9rem;
-      }
-
-      .time-box {
-        padding: 8px 4px;
-      }
-
-      .score-pill {
-        margin-top: 8px;
-        font-size: .78rem;
-      }
+      .app-icon { width: 44px; height: 44px; flex-basis: 44px; font-size: 23px; }
+      .brand h1 { font-size: .98rem; }
+      .brand p { font-size: .72rem; }
+      .smart-badge { padding: 8px 11px; }
+      .install-badge { padding: 6px 10px; }
+      .tagline { margin-top: 9px; }
+      .tagline small { font-size: .80rem; }
+      .tagline h2 { font-size: 1.55rem; }
+      .tagline strong { font-size: .82rem; }
+      .tagline p { display: none; }
+      .game-tab { padding: 9px 8px; font-size: .86rem; }
+      .main-card { padding: 10px; border-radius: 22px; }
+      .card-head h3 { font-size: 1.16rem; }
+      .draw-text { font-size: .77rem; margin-bottom: 6px; }
+      .time-box { padding: 6px 3px; }
+      .time-box strong { font-size: 1rem; }
+      .time-box small { font-size: .48rem; }
+      .label { margin: 3px 0 5px; }
+      .ball { width: 38px; height: 38px; font-size: .92rem; }
+      .extra-ball { width: 40px; height: 40px; border-width: 3px; }
+      .score-pill { margin-top: 5px; padding: 6px 10px; font-size: .70rem; }
+      .action-grid { margin-top: 8px; }
+      .action-grid.second { margin-top: 6px; }
+      .btn { min-height: 38px; padding: 8px 5px; font-size: .74rem; }
+      .panel { min-height: 72px; padding: 7px; }
+      .panel-tab { padding: 7px 1px; font-size: .58rem; }
     }
 
     @media (max-width: 420px) {
-      .app {
-        padding-left: 10px;
-        padding-right: 10px;
-      }
-
-      .hero {
-        margin-left: -10px;
-        margin-right: -10px;
-      }
-
-      .brand h1 {
-        font-size: 1.08rem;
-      }
-
-      .brand p {
-        font-size: .78rem;
-      }
-
-      .smart-badge {
-        padding: 9px 12px;
-      }
-
-      .install-badge {
-        padding: 7px 10px;
-      }
-
-      .ball {
-        width: 42px;
-        height: 42px;
-      }
-
-      .extra-ball {
-        width: 46px;
-        height: 46px;
-      }
-
-      .action-grid.second {
-        gap: 7px;
-      }
-
-      .btn {
-        font-size: .84rem;
-      }
-
-      .panel-tab {
-        font-size: .70rem;
-      }
+      .app { padding-left: 9px; padding-right: 9px; }
+      .hero { margin-left: -9px; margin-right: -9px; }
+      .brand h1 { font-size: .96rem; }
+      .brand p { font-size: .70rem; }
+      .tagline h2 { font-size: 1.52rem; }
+      .tagline strong { letter-spacing: 2.4px; }
+      .game-tabs { gap: 8px; }
+      .balls { gap: 7px; }
+      .ball { width: 38px; height: 38px; }
+      .extra-ball { width: 40px; height: 40px; }
+      .action-grid.second { gap: 5px; }
+      .btn { font-size: .72rem; }
     }
   </style>
-</head>
 
+</head>
 <body>
   <div class="stars"></div>
-
   <main class="app">
     <header class="hero">
       <div class="topbar">
         <div class="brand">
           <div class="app-icon">🪐</div>
-          <div>
-            <h1>EUROLOTO GALACTIC</h1>
-            <p>EuroMillions · Loto</p>
-          </div>
+          <div><h1>EUROLOTO GALACTIC</h1><p>EuroMillions · Loto</p></div>
         </div>
-
-        <div class="top-actions">
-          <button class="smart-badge" id="smartBtn">Smart</button>
-          <button class="install-badge" id="installBtn">Installer</button>
-        </div>
+        <div class="top-actions"><button class="smart-badge" id="smartBtn">Smart</button><button class="install-badge" id="installBtn">Installer</button></div>
       </div>
-
       <div class="tagline">
         <small>Ce soir, tente ta grille</small>
         <h2>Générateur Premium</h2>
         <strong>Classique + Smart+</strong>
-        <p>Analyse privée : équilibre, somme, écarts, chaud/froid. Sans promesse de gain.</p>
+        <p>Grille classique ou Premium calculée en privé. Sans promesse de gain.</p>
       </div>
     </header>
-
     <section class="game-tabs">
       <button class="game-tab active" id="euroBtn">⭐ EuroMillions</button>
       <button class="game-tab" id="lotoBtn">🎱 Loto</button>
     </section>
-
     <section class="main-card">
-      <div class="card-head">
-        <div>
-          <h3 id="gameTitle">EuroMillions</h3>
-          <p class="draw-text" id="drawText">Prochain tirage : calcul…</p>
-        </div>
-        <div class="badge" id="formatBadge">5 + 2</div>
-      </div>
-
-      <div class="countdown">
-        <div class="time-box"><strong id="d">0</strong><small>JOURS</small></div>
-        <div class="time-box"><strong id="h">0</strong><small>HEURES</small></div>
-        <div class="time-box"><strong id="m">0</strong><small>MIN</small></div>
-        <div class="time-box"><strong id="s">0</strong><small>SEC</small></div>
-      </div>
-
-      <div class="label">NUMÉROS</div>
-      <div class="balls" id="mainBalls"></div>
-
-      <div class="label" id="extraLabel">ÉTOILES</div>
-      <div class="balls" id="extraBalls"></div>
-
+      <div class="card-head"><div><h3 id="gameTitle">EuroMillions</h3><p class="draw-text" id="drawText">Prochain tirage : calcul…</p></div><div class="badge" id="formatBadge">5 + 2</div></div>
+      <div class="countdown"><div class="time-box"><strong id="d">0</strong><small>JOURS</small></div><div class="time-box"><strong id="h">0</strong><small>HEURES</small></div><div class="time-box"><strong id="m">0</strong><small>MIN</small></div><div class="time-box"><strong id="s">0</strong><small>SEC</small></div></div>
+      <div class="label">NUMÉROS</div><div class="balls" id="mainBalls"></div>
+      <div class="label" id="extraLabel">ÉTOILES</div><div class="balls" id="extraBalls"></div>
       <div class="score-pill" id="scorePill">Score Smart+ : --/99</div>
-
-      <div class="action-grid">
-        <button class="btn btn-blue" id="classicBtn">🎲 Classique</button>
-        <button class="btn btn-premium" id="premiumBtn">✨ Premium</button>
-      </div>
-
-      <div class="action-grid second">
-        <button class="btn btn-white" id="copyBtn">📋 Copier</button>
-        <button class="btn btn-green" id="waBtn">WhatsApp</button>
-        <button class="btn btn-dark" id="verifyBtn">🔎 Vérifier</button>
-      </div>
+      <div class="action-grid"><button class="btn btn-blue" id="classicBtn">🎲 Classique</button><button class="btn btn-premium" id="premiumBtn">✨ Premium</button></div>
+      <div class="action-grid second"><button class="btn btn-white" id="copyBtn">📋 Copier</button><button class="btn btn-green" id="waBtn">WhatsApp</button><button class="btn btn-dark" id="verifyBtn">🔎 Vérifier</button></div>
     </section>
-
     <section class="panel">
-      <div class="panel-tabs">
-        <button class="panel-tab active" data-tab="tirage">Tirage</button>
-        <button class="panel-tab" data-tab="gain">Gain</button>
-        <button class="panel-tab" data-tab="stats">Stats</button>
-        <button class="panel-tab" data-tab="history">Historique</button>
-        <button class="panel-tab" data-tab="infos">Infos</button>
-      </div>
-
+      <div class="panel-tabs"><button class="panel-tab active" data-tab="tirage">Tirage</button><button class="panel-tab" data-tab="gain">Gain</button><button class="panel-tab" data-tab="stats">Stats</button><button class="panel-tab" data-tab="history">Historique</button><button class="panel-tab" data-tab="infos">Infos</button></div>
       <div class="panel-content">
-        <div class="section active" id="tirage">
-          <div class="box">
-            <h4>🏆 Tirage de référence</h4>
-            <p id="referenceText"></p>
-            <div class="chips" id="referenceChips"></div>
-            <button class="clear-btn" id="editReferenceBtn">Modifier le résultat</button>
-          </div>
-        </div>
-
-        <div class="section" id="gain">
-          <div class="box">
-            <h4>💰 Vérification indicative</h4>
-            <p id="gainText">Génère une grille puis appuie sur “Vérifier”.</p>
-          </div>
-        </div>
-
-        <div class="section" id="stats">
-          <div class="box">
-            <h4>📊 Statistiques Smart+</h4>
-            <p>Numéros les plus sortis / favorisés localement</p>
-            <div class="chips" id="hotChips"></div>
-
-            <p style="margin-top:12px;">Numéros les moins sortis / froids</p>
-            <div class="chips" id="coldChips"></div>
-
-            <p id="smartScoreText" style="margin-top:12px;"></p>
-          </div>
-        </div>
-
-        <div class="section" id="history">
-          <div class="box">
-            <h4>📜 Historique</h4>
-            <div id="historyList"></div>
-            <button class="clear-btn" id="clearHistoryBtn">🧹 Effacer</button>
-          </div>
-        </div>
-
-        <div class="section" id="infos">
-          <div class="box">
-            <h4>ℹ️ À propos</h4>
-            <p>
-              Euroloto Galactic est une application indépendante, non affiliée à la FDJ.
-              Les grilles sont générées aléatoirement. Le mode Smart+ applique seulement
-              des filtres statistiques privés : équilibre pair/impair, petits/grands,
-              somme, écarts, historique local, numéros chauds et froids.
-            </p>
-            <p style="margin-top:10px;">
-              Aucun tirage, score, statistique, algorithme ou système ne garantit un gain.
-              Vérifie toujours les résultats et gains sur une source officielle ou sur ton reçu.
-            </p>
-            <button class="clear-btn" id="copyLegalBtn">Copier l’avertissement</button>
-          </div>
-        </div>
+        <div class="section active" id="tirage"><div class="box"><h4>🏆 Tirage de référence</h4><p id="referenceText"></p><div class="chips" id="referenceChips"></div><button class="clear-btn" id="editReferenceBtn">Modifier le résultat</button></div></div>
+        <div class="section" id="gain"><div class="box"><h4>💰 Gain remporté ou pas</h4><p id="gainText">Génère une grille puis appuie sur “Vérifier”.</p></div></div>
+        <div class="section" id="stats"><div class="box"><h4>📊 Statistiques Smart+</h4><p>Numéros les plus sortis / favorisés localement</p><div class="chips" id="hotChips"></div><p style="margin-top:12px;">Numéros les moins sortis / froids</p><div class="chips" id="coldChips"></div><p id="smartScoreText" style="margin-top:12px;"></p></div></div>
+        <div class="section" id="history"><div class="box"><h4>📜 Historique</h4><div id="historyList"></div><button class="clear-btn" id="clearHistoryBtn">🧹 Effacer</button></div></div><div class="section" id="infos"><div class="box"><h4>ℹ️ À propos</h4><p>Euroloto Galactic est une application indépendante, non affiliée à la FDJ. Les grilles sont générées aléatoirement. Le mode Smart+ applique seulement des filtres statistiques privés : équilibre pair/impair, petits/grands, somme, écarts, historique local, numéros chauds et froids.</p><p style="margin-top:10px;">Aucun tirage, score, statistique, algorithme ou système ne garantit un gain. Vérifie toujours les résultats et gains sur une source officielle ou sur ton reçu.</p><button class="clear-btn" id="copyLegalBtn">Copier l’avertissement</button></div></div>
       </div>
     </section>
-
-    <p class="footer">
-      Application indépendante, non affiliée à la FDJ.<br>
-      Aucun gain garanti. V1.1 Smart+
-    </p>
+    <p class="footer">Application indépendante, non affiliée à la FDJ.<br>Numéros générés aléatoirement. Aucun gain garanti. V1.1.1 Compact Mobile</p>
   </main>
-
   <div class="toast" id="toast"></div>
-
   <script>
-    const PREMIUM_CODE = "galactic2026";
-    const STORAGE_KEY = "euroloto_galactic_v11_smart_plus";
-
-    const CONFIG = {
-      euro: {
-        name: "EuroMillions",
-        format: "5 + 2",
-        mainMax: 50,
-        mainCount: 5,
-        extraMax: 12,
-        extraCount: 2,
-        extraName: "ÉTOILES",
-        drawDays: [2, 5],
-        drawHour: 21,
-        drawMinute: 5,
-        referenceMain: [18, 25, 31, 37, 45],
-        referenceExtra: [4, 9],
-        hotDefault: [30, 31, 24, 7, 41],
-        coldDefault: [43, 1, 33, 46, 8]
-      },
-      loto: {
-        name: "Loto",
-        format: "5 + 1",
-        mainMax: 49,
-        mainCount: 5,
-        extraMax: 10,
-        extraCount: 1,
-        extraName: "NUMÉRO CHANCE",
-        drawDays: [1, 3, 6],
-        drawHour: 20,
-        drawMinute: 20,
-        referenceMain: [1, 15, 32, 37, 39],
-        referenceExtra: [1],
-        hotDefault: [7, 24, 30, 31, 41],
-        coldDefault: [1, 8, 33, 43, 46]
-      }
-    };
-
-    let game = "euro";
-    let currentGrid = null;
-    let state = loadState();
-    let deferredPrompt = null;
-
-    const $ = (s) => document.querySelector(s);
-    const $$ = (s) => Array.from(document.querySelectorAll(s));
-
-    init();
-
-    function init() {
-      bind();
-      initInstall();
-      renderGame();
-      renderHistory();
-      renderStats();
-      updateTimer();
-      setInterval(updateTimer, 1000);
-      registerSW();
-    }
-
-    function loadState() {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) {
-          return {
-            premium: false,
-            history: [],
-            references: {}
-          };
-        }
-
-        const data = JSON.parse(raw);
-        return {
-          premium: Boolean(data.premium),
-          history: Array.isArray(data.history) ? data.history : [],
-          references: data.references || {}
-        };
-      } catch {
-        return {
-          premium: false,
-          history: [],
-          references: {}
-        };
-      }
-    }
-
-    function saveState() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    }
-
-    function bind() {
-      $("#euroBtn").onclick = () => switchGame("euro");
-      $("#lotoBtn").onclick = () => switchGame("loto");
-      $("#classicBtn").onclick = () => generateClassic();
-      $("#premiumBtn").onclick = () => generatePremium();
-      $("#smartBtn").onclick = () => unlockPremium();
-      $("#installBtn").onclick = installApp;
-      $("#copyBtn").onclick = copyGrid;
-      $("#waBtn").onclick = shareWhatsapp;
-      $("#verifyBtn").onclick = verifyGrid;
-      $("#editReferenceBtn").onclick = editReference;
-      $("#clearHistoryBtn").onclick = clearHistory;
-      $("#copyLegalBtn").onclick = copyLegal;
-
-      $$(".panel-tab").forEach(btn => {
-        btn.onclick = () => openTab(btn.dataset.tab);
-      });
-    }
-
-    function switchGame(next) {
-      game = next;
-      $("#euroBtn").classList.toggle("active", game === "euro");
-      $("#lotoBtn").classList.toggle("active", game === "loto");
-      renderGame();
-      renderStats();
-      renderHistory();
-      updateTimer();
-    }
-
-    function renderGame() {
-      const c = CONFIG[game];
-
-      $("#gameTitle").textContent = c.name;
-      $("#formatBadge").textContent = c.format;
-      $("#extraLabel").textContent = c.extraName;
-
-      if (!currentGrid || currentGrid.game !== game) {
-        currentGrid = buildClassicGrid();
-      }
-
-      renderBalls(currentGrid);
-      renderReference();
-      renderSmartBadge();
-      renderScorePill();
-    }
-
-    function renderSmartBadge() {
-      $("#smartBtn").textContent = state.premium ? "Smart+" : "Smart";
-    }
-
-    function renderBalls(grid) {
-      $("#mainBalls").innerHTML = grid.main.map(n => `<div class="ball">${n}</div>`).join("");
-      $("#extraBalls").innerHTML = grid.extra.map(n => `<div class="ball extra-ball">${n}</div>`).join("");
-    }
-
-    function getReference() {
-      const c = CONFIG[game];
-      const saved = state.references[game];
-
-      if (saved) return saved;
-
-      return {
-        main: c.referenceMain,
-        extra: c.referenceExtra
-      };
-    }
-
-    function renderReference() {
-      const c = CONFIG[game];
-      const ref = getReference();
-
-      $("#referenceText").textContent = `${c.name} · résultat de référence`;
-      $("#referenceChips").innerHTML =
-        ref.main.map(n => `<span class="chip">${n}</span>`).join("") +
-        ref.extra.map(n => `<span class="chip hot">${n}</span>`).join("");
-    }
-
-    function buildClassicGrid() {
-      const c = CONFIG[game];
-
-      return {
-        id: makeId(),
-        game,
-        type: "Classique",
-        main: pickUnique(1, c.mainMax, c.mainCount),
-        extra: pickUnique(1, c.extraMax, c.extraCount),
-        score: 0,
-        reason: [],
-        createdAt: new Date().toISOString()
-      };
-    }
-
-    function generateClassic() {
-      currentGrid = buildClassicGrid();
-      const result = scoreGrid(currentGrid);
-      currentGrid.score = result.score;
-      currentGrid.reason = result.reason;
-
-      saveHistory(currentGrid);
-      renderBalls(currentGrid);
-      renderScorePill();
-      renderHistory();
-      renderStats();
-      toast("Grille classique générée 🎲");
-    }
-
-    function generatePremium() {
-      if (!state.premium) {
-        unlockPremium(() => generatePremium());
-        return;
-      }
-
-      let best = null;
-
-      for (let i = 0; i < 900; i++) {
-        const candidate = buildClassicGrid();
-        candidate.type = "Premium";
-        const result = scoreGrid(candidate);
-        candidate.score = result.score;
-        candidate.reason = result.reason;
-
-        if (!best || candidate.score > best.score) {
-          best = candidate;
-        }
-      }
-
-      currentGrid = best;
-      saveHistory(currentGrid);
-      renderBalls(currentGrid);
-      renderScorePill();
-      renderHistory();
-      renderStats();
-      toast("Grille Premium générée ✨");
-    }
-
-    function scoreGrid(grid) {
-      const c = CONFIG[grid.game];
-      const profile = getProfile(grid.game);
-
-      let score = 34;
-      const reason = [];
-
-      const odds = grid.main.filter(n => n % 2 !== 0).length;
-      const lows = grid.main.filter(n => n <= Math.floor(c.mainMax / 2)).length;
-      const sum = grid.main.reduce((a, b) => a + b, 0);
-
-      const gaps = [];
-      for (let i = 1; i < grid.main.length; i++) {
-        gaps.push(grid.main[i] - grid.main[i - 1]);
-      }
-
-      const consecutive = gaps.filter(g => g === 1).length;
-      const averageGap = gaps.reduce((a, b) => a + b, 0) / gaps.length;
-      const range = grid.main[grid.main.length - 1] - grid.main[0];
-      const decadeSpread = new Set(grid.main.map(n => Math.floor((n - 1) / 10))).size;
-
-      if (odds === 2 || odds === 3) {
-        score += 13;
-        reason.push("équilibre pair/impair");
-      }
-
-      if (lows === 2 || lows === 3) {
-        score += 13;
-        reason.push("équilibre petits/grands");
-      }
-
-      const minSum = grid.game === "euro" ? 115 : 105;
-      const maxSum = grid.game === "euro" ? 175 : 165;
-
-      if (sum >= minSum && sum <= maxSum) {
-        score += 15;
-        reason.push("somme cohérente");
-      }
-
-      if (consecutive <= 1) {
-        score += 7;
-        reason.push("peu de suites");
-      }
-
-      if (averageGap >= 5) {
-        score += 7;
-        reason.push("écarts corrects");
-      }
-
-      if (range >= 25) {
-        score += 7;
-        reason.push("bonne amplitude");
-      }
-
-      if (decadeSpread >= 3) {
-        score += 7;
-        reason.push("répartition par dizaines");
-      }
-
-      const hotHits = grid.main.filter(n => profile.hot.includes(n)).length;
-      const coldHits = grid.main.filter(n => profile.cold.includes(n)).length;
-
-      if (hotHits >= 1 && hotHits <= 3) {
-        score += 10;
-        reason.push("mix numéros chauds");
-      }
-
-      if (coldHits >= 1 && coldHits <= 2) {
-        score += 6;
-        reason.push("mix numéros froids");
-      }
-
-      const repetitionPenalty = countSimilarHistory(grid);
-      score -= repetitionPenalty * 6;
-
-      if (repetitionPenalty === 0) {
-        reason.push("faible répétition historique");
-      }
-
-      return {
-        score: Math.max(1, Math.min(99, score)),
-        reason
-      };
-    }
-
-    function countSimilarHistory(grid) {
-      return state.history.filter(item => {
-        if (item.game !== grid.game) return false;
-        const matches = item.main.filter(n => grid.main.includes(n)).length;
-        return matches >= 3;
-      }).length;
-    }
-
-    function getProfile(profileGame) {
-      const c = CONFIG[profileGame];
-      const counts = new Map();
-
-      for (let i = 1; i <= c.mainMax; i++) counts.set(i, 0);
-
-      const history = state.history.filter(g => g.game === profileGame);
-      const ref = state.references[profileGame] || {
-        main: c.referenceMain,
-        extra: c.referenceExtra
-      };
-
-      ref.main.forEach(n => counts.set(n, (counts.get(n) || 0) + 3));
-      history.forEach(g => g.main.forEach(n => counts.set(n, (counts.get(n) || 0) + 1)));
-
-      const hot = [...counts.entries()]
-        .sort((a, b) => b[1] - a[1] || a[0] - b[0])
-        .slice(0, 5)
-        .map(([n]) => n);
-
-      const cold = [...counts.entries()]
-        .sort((a, b) => a[1] - b[1] || a[0] - b[0])
-        .slice(0, 5)
-        .map(([n]) => n);
-
-      return {
-        hot: hot.length ? hot : c.hotDefault,
-        cold: cold.length ? cold : c.coldDefault
-      };
-    }
-
-    function renderStats() {
-      const profile = getProfile(game);
-
-      $("#hotChips").innerHTML = profile.hot.map(n => `<span class="chip hot">🔥 ${n}</span>`).join("");
-      $("#coldChips").innerHTML = profile.cold.map(n => `<span class="chip cold">❄️ ${n}</span>`).join("");
-
-      if (currentGrid && currentGrid.game === game) {
-        const scored = scoreGrid(currentGrid);
-        $("#smartScoreText").textContent =
-          `Score Smart+ : ${scored.score}/99 · ${scored.reason.slice(0, 4).join(", ") || "analyse locale"}.`;
-      } else {
-        $("#smartScoreText").textContent = "Génère une grille pour afficher le score Smart+.";
-      }
-    }
-
-    function renderScorePill() {
-      if (!currentGrid) {
-        $("#scorePill").classList.remove("show");
-        return;
-      }
-
-      const scored = scoreGrid(currentGrid);
-      currentGrid.score = scored.score;
-      currentGrid.reason = scored.reason;
-      $("#scorePill").textContent = `Score Smart+ : ${scored.score}/99`;
-      $("#scorePill").classList.add("show");
-    }
-
-    function verifyGrid() {
-      if (!currentGrid || currentGrid.game !== game) {
-        toast("Génère d’abord une grille.");
-        return;
-      }
-
-      const c = CONFIG[game];
-      const ref = getReference();
-
-      const mainHits = currentGrid.main.filter(n => ref.main.includes(n)).length;
-      const extraHits = currentGrid.extra.filter(n => ref.extra.includes(n)).length;
-
-      let matchDetected = false;
-
-      if (game === "euro") {
-        matchDetected = mainHits >= 2 || extraHits >= 1;
-      } else {
-        matchDetected = mainHits >= 2 || extraHits >= 1;
-      }
-
-      $("#gainText").innerHTML = `
-        <span class="${matchDetected ? "gain-ok" : "gain-no"}">
-          ${matchDetected ? "✅ Correspondance détectée" : "❌ Aucune correspondance suffisante"}
-        </span><br>
-        ${mainHits} numéro(s) trouvé(s)<br>
-        ${extraHits} ${c.extraName.toLowerCase()} trouvé(s)<br>
-        Résultat indicatif : montant et validité à vérifier sur la source officielle ou sur ton reçu.
-      `;
-
-      openTab("gain");
-      toast("Vérification terminée 🔎");
-    }
-
-    function openTab(id) {
-      $$(".panel-tab").forEach(b => b.classList.toggle("active", b.dataset.tab === id));
-      $$(".section").forEach(s => s.classList.toggle("active", s.id === id));
-    }
-
-    function saveHistory(grid) {
-      state.history.unshift({
-        ...grid,
-        createdAt: new Date().toISOString()
-      });
-
-      state.history = state.history.slice(0, 40);
-      saveState();
-    }
-
-    function renderHistory() {
-      const items = state.history.filter(g => g.game === game);
-
-      if (!items.length) {
-        $("#historyList").innerHTML = `<p style="color:#6c7280;">Aucune grille pour le moment.</p>`;
-        return;
-      }
-
-      $("#historyList").innerHTML = items.map(g => {
-        const c = CONFIG[g.game];
-        const icon = g.type === "Premium" ? "✨" : "🎲";
-        const score = g.score ? ` · ${g.score}/99` : "";
-
-        return `
-          <div class="history-item">
-            ${icon} ${g.type}${score} · ${c.name} : ${g.main.join(" - ")} | ${g.extra.join(" - ")}
-          </div>
-        `;
-      }).join("");
-    }
-
-    function clearHistory() {
-      if (!confirm("Effacer l’historique ?")) return;
-      state.history = [];
-      saveState();
-      renderHistory();
-      renderStats();
-      toast("Historique effacé");
-    }
-
-    function editReference() {
-      const c = CONFIG[game];
-      const mainRaw = prompt(`Entre les ${c.mainCount} numéros officiels séparés par espace`, c.referenceMain.join(" "));
-      if (!mainRaw) return;
-
-      const extraRaw = prompt(`Entre ${c.extraCount} ${c.extraName.toLowerCase()} séparé(s) par espace`, c.referenceExtra.join(" "));
-      if (!extraRaw) return;
-
-      const main = parseNums(mainRaw, c.mainCount, c.mainMax);
-      const extra = parseNums(extraRaw, c.extraCount, c.extraMax);
-
-      if (!main || !extra) {
-        toast("Format incorrect");
-        return;
-      }
-
-      state.references[game] = { main, extra };
-      saveState();
-      renderReference();
-      renderStats();
-      toast("Résultat de référence modifié");
-    }
-
-    function parseNums(raw, count, max) {
-      const nums = raw
-        .split(/[\s,;.-]+/)
-        .map(v => Number(v.trim()))
-        .filter(Number.isInteger);
-
-      const unique = [...new Set(nums)].sort((a, b) => a - b);
-
-      if (unique.length !== count) return null;
-      if (unique.some(n => n < 1 || n > max)) return null;
-
-      return unique;
-    }
-
-    function copyGrid() {
-      if (!currentGrid) return toast("Aucune grille à copier.");
-      const c = CONFIG[currentGrid.game];
-      const text = `${c.name} : ${currentGrid.main.join(" - ")} | ${c.extraName} : ${currentGrid.extra.join(" - ")} — Aucun gain garanti.`;
-      navigator.clipboard.writeText(text).then(() => toast("Grille copiée 📋")).catch(() => toast(text));
-    }
-
-    function shareWhatsapp() {
-      if (!currentGrid) return toast("Aucune grille à partager.");
-      const c = CONFIG[currentGrid.game];
-      const text = encodeURIComponent(`${c.name} : ${currentGrid.main.join(" - ")} | ${c.extraName} : ${currentGrid.extra.join(" - ")}\nGénéré avec Euroloto Galactic. Aucun gain garanti.`);
-      window.open(`https://wa.me/?text=${text}`, "_blank");
-    }
-
-    function copyLegal() {
-      const text = "Euroloto Galactic est une application indépendante, non affiliée à la FDJ. Les numéros sont générés aléatoirement. Aucun tirage, score, statistique, algorithme ou système ne garantit un gain.";
-      navigator.clipboard.writeText(text).then(() => toast("Avertissement copié")).catch(() => toast(text));
-    }
-
-    function unlockPremium(callback) {
-      if (state.premium) {
-        toast("Smart+ déjà activé");
-        if (typeof callback === "function") callback();
-        return;
-      }
-
-      const code = prompt("Code Premium");
-      if (!code) return;
-
-      if (code.trim().toLowerCase() !== PREMIUM_CODE) {
-        toast("Code Premium incorrect");
-        return;
-      }
-
-      state.premium = true;
-      saveState();
-      renderSmartBadge();
-      toast("Smart+ activé ✅");
-
-      if (typeof callback === "function") setTimeout(callback, 300);
-    }
-
-    function updateTimer() {
-      const c = CONFIG[game];
-      const next = getNextDraw();
-      const diff = next.getTime() - Date.now();
-
-      if (diff <= 0) {
-        $("#d").textContent = "0";
-        $("#h").textContent = "0";
-        $("#m").textContent = "0";
-        $("#s").textContent = "0";
-        return;
-      }
-
-      const total = Math.floor(diff / 1000);
-      const days = Math.floor(total / 86400);
-      const hours = Math.floor((total % 86400) / 3600);
-      const minutes = Math.floor((total % 3600) / 60);
-      const seconds = total % 60;
-
-      $("#d").textContent = days;
-      $("#h").textContent = hours;
-      $("#m").textContent = minutes;
-      $("#s").textContent = seconds;
-      $("#drawText").textContent = `Prochain tirage : ${formatDrawDate(next)} vers ${pad(c.drawHour)}:${pad(c.drawMinute)}`;
-    }
-
-    function getNextDraw() {
-      const c = CONFIG[game];
-      const now = new Date();
-
-      for (let add = 0; add < 10; add++) {
-        const d = new Date(now);
-        d.setDate(now.getDate() + add);
-        d.setHours(c.drawHour, c.drawMinute, 0, 0);
-
-        if (c.drawDays.includes(d.getDay()) && d.getTime() > now.getTime()) {
-          return d;
-        }
-      }
-
-      const fallback = new Date(now);
-      fallback.setDate(now.getDate() + 1);
-      fallback.setHours(c.drawHour, c.drawMinute, 0, 0);
-      return fallback;
-    }
-
-    function formatDrawDate(date) {
-      return new Intl.DateTimeFormat("fr-FR", {
-        weekday: "long",
-        day: "numeric",
-        month: "long"
-      }).format(date);
-    }
-
-    function pickUnique(min, max, count) {
-      const nums = [];
-
-      while (nums.length < count) {
-        const n = secureRandomInt(max - min + 1) + min;
-        if (!nums.includes(n)) nums.push(n);
-      }
-
-      return nums.sort((a, b) => a - b);
-    }
-
-    function secureRandomInt(maxExclusive) {
-      if (window.crypto && window.crypto.getRandomValues) {
-        const array = new Uint32Array(1);
-        const limit = Math.floor(0x100000000 / maxExclusive) * maxExclusive;
-
-        do {
-          window.crypto.getRandomValues(array);
-        } while (array[0] >= limit);
-
-        return array[0] % maxExclusive;
-      }
-
-      return Math.floor(Math.random() * maxExclusive);
-    }
-
-    function makeId() {
-      if (crypto && crypto.randomUUID) return crypto.randomUUID();
-      return "id-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2);
-    }
-
-    function pad(n) {
-      return String(n).padStart(2, "0");
-    }
-
-    function initInstall() {
-      window.addEventListener("beforeinstallprompt", (event) => {
-        event.preventDefault();
-        deferredPrompt = event;
-        $("#installBtn").classList.add("show");
-      });
-
-      window.addEventListener("appinstalled", () => {
-        deferredPrompt = null;
-        $("#installBtn").classList.remove("show");
-        toast("Application installée ✅");
-      });
-    }
-
-    async function installApp() {
-      if (!deferredPrompt) {
-        toast("Menu navigateur → Ajouter à l’écran d’accueil");
-        return;
-      }
-
-      deferredPrompt.prompt();
-      await deferredPrompt.userChoice;
-      deferredPrompt = null;
-      $("#installBtn").classList.remove("show");
-    }
-
-    let toastTimer = null;
-
-    function toast(msg) {
-      $("#toast").textContent = msg;
-      $("#toast").classList.add("show");
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => $("#toast").classList.remove("show"), 2400);
-    }
-
-    function registerSW() {
-      if (!("serviceWorker" in navigator)) return;
-      window.addEventListener("load", () => {
-        navigator.serviceWorker.register("/sw.js").catch(() => {});
-      });
-    }
+    const PREMIUM_CODE="galactic2026";const STORAGE_KEY="euroloto_galactic_v11_smart_plus";
+    const CONFIG={euro:{name:"EuroMillions",icon:"⭐",format:"5 + 2",mainMax:50,mainCount:5,extraMax:12,extraCount:2,extraName:"ÉTOILES",drawDays:[2,5],drawHour:21,drawMinute:5,referenceMain:[18,25,31,37,45],referenceExtra:[4,9],hotDefault:[30,31,24,7,41],coldDefault:[43,1,33,46,8]},loto:{name:"Loto",icon:"🎱",format:"5 + 1",mainMax:49,mainCount:5,extraMax:10,extraCount:1,extraName:"NUMÉRO CHANCE",drawDays:[1,3,6],drawHour:20,drawMinute:20,referenceMain:[1,15,32,37,39],referenceExtra:[1],hotDefault:[7,24,30,31,41],coldDefault:[1,8,33,43,46]}};
+    let game="euro";let currentGrid=null;let state=loadState();let deferredPrompt=null;const $=s=>document.querySelector(s);const $$=s=>Array.from(document.querySelectorAll(s));init();
+    function init(){bind();initInstall();renderGame();renderHistory();renderStats();updateTimer();setInterval(updateTimer,1000);registerSW()}
+    function loadState(){try{const raw=localStorage.getItem(STORAGE_KEY);if(!raw)return{premium:false,history:[],references:{}};const data=JSON.parse(raw);return{premium:Boolean(data.premium),history:Array.isArray(data.history)?data.history:[],references:data.references||{}}}catch{return{premium:false,history:[],references:{}}}}
+    function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
+    function bind(){$("#euroBtn").onclick=()=>switchGame("euro");$("#lotoBtn").onclick=()=>switchGame("loto");$("#classicBtn").onclick=()=>generateClassic();$("#premiumBtn").onclick=()=>generatePremium();$("#smartBtn").onclick=()=>unlockPremium();$("#installBtn").onclick=installApp;$("#copyBtn").onclick=copyGrid;$("#waBtn").onclick=shareWhatsapp;$("#verifyBtn").onclick=verifyGrid;$("#editReferenceBtn").onclick=editReference;$("#clearHistoryBtn").onclick=clearHistory;$("#copyLegalBtn").onclick=copyLegal;$$(".panel-tab").forEach(btn=>{btn.onclick=()=>openTab(btn.dataset.tab)})}
+    function switchGame(next){game=next;$("#euroBtn").classList.toggle("active",game==="euro");$("#lotoBtn").classList.toggle("active",game==="loto");renderGame();renderStats();renderHistory();updateTimer()}
+    function renderGame(){const c=CONFIG[game];$("#gameTitle").textContent=c.name;$("#formatBadge").textContent=c.format;$("#extraLabel").textContent=c.extraName;if(!currentGrid||currentGrid.game!==game)currentGrid=buildClassicGrid();renderBalls(currentGrid);renderReference();renderSmartBadge();renderScorePill()}
+    function renderSmartBadge(){$("#smartBtn").textContent=state.premium?"Smart+":"Smart"}
+    function renderBalls(grid){$("#mainBalls").innerHTML=grid.main.map(n=>`<div class="ball">${n}</div>`).join("");$("#extraBalls").innerHTML=grid.extra.map(n=>`<div class="ball extra-ball">${n}</div>`).join("")}
+    function getReference(){const c=CONFIG[game];const saved=state.references[game];if(saved)return saved;return{main:c.referenceMain,extra:c.referenceExtra}}
+    function renderReference(){const c=CONFIG[game];const ref=getReference();$("#referenceText").textContent=`${c.name} · résultat de référence`;$("#referenceChips").innerHTML=ref.main.map(n=>`<span class="chip">${n}</span>`).join("")+ref.extra.map(n=>`<span class="chip hot">${n}</span>`).join("")}
+    function buildClassicGrid(){const c=CONFIG[game];return{id:makeId(),game,type:"Classique",main:pickUnique(1,c.mainMax,c.mainCount),extra:pickUnique(1,c.extraMax,c.extraCount),score:0,createdAt:new Date().toISOString()}}
+    function generateClassic(){currentGrid=buildClassicGrid();currentGrid.score=scoreGrid(currentGrid).score;saveHistory(currentGrid);renderBalls(currentGrid);renderScorePill();renderHistory();renderStats();toast("Grille classique générée 🎲")}
+    function generatePremium(){if(!state.premium){unlockPremium(()=>generatePremium());return}let best=null;for(let i=0;i<900;i++){const candidate=buildClassicGrid();candidate.type="Premium";const result=scoreGrid(candidate);candidate.score=result.score;candidate.reason=result.reason;if(!best||candidate.score>best.score)best=candidate}currentGrid=best;saveHistory(currentGrid);renderBalls(currentGrid);renderScorePill();renderHistory();renderStats();toast("Grille Premium générée ✨")}
+    function scoreGrid(grid){const c=CONFIG[grid.game];const profile=getProfile(grid.game);let score=35;const reason=[];const odds=grid.main.filter(n=>n%2!==0).length;const lows=grid.main.filter(n=>n<=Math.floor(c.mainMax/2)).length;const sum=grid.main.reduce((a,b)=>a+b,0);const gaps=[];for(let i=1;i<grid.main.length;i++)gaps.push(grid.main[i]-grid.main[i-1]);const consecutive=gaps.filter(g=>g===1).length;const averageGap=gaps.reduce((a,b)=>a+b,0)/gaps.length;const range=grid.main[grid.main.length-1]-grid.main[0];const decadeSpread=new Set(grid.main.map(n=>Math.floor((n-1)/10))).size;if(odds===2||odds===3){score+=14;reason.push("équilibre pair/impair")}if(lows===2||lows===3){score+=14;reason.push("équilibre petits/grands")}const minSum=grid.game==="euro"?115:105;const maxSum=grid.game==="euro"?175:165;if(sum>=minSum&&sum<=maxSum){score+=16;reason.push("somme cohérente")}if(consecutive<=1){score+=8;reason.push("peu de suites")}if(averageGap>=5){score+=8;reason.push("écarts corrects")}if(range>=25){score+=7;reason.push("bonne amplitude")}if(decadeSpread>=3){score+=7;reason.push("répartition par dizaines")}const hotHits=grid.main.filter(n=>profile.hot.includes(n)).length;const coldHits=grid.main.filter(n=>profile.cold.includes(n)).length;if(hotHits>=1&&hotHits<=3){score+=12;reason.push("mix numéros chauds")}if(coldHits>=1&&coldHits<=2){score+=7;reason.push("mix numéros froids")}const repetitionPenalty=countSimilarHistory(grid);score-=repetitionPenalty*5;if(repetitionPenalty===0)reason.push("faible répétition historique");return{score:Math.max(1,Math.min(99,score)),reason}}
+    function countSimilarHistory(grid){return state.history.filter(item=>{if(item.game!==grid.game)return false;const matches=item.main.filter(n=>grid.main.includes(n)).length;return matches>=3}).length}
+    function getProfile(profileGame){const c=CONFIG[profileGame];const counts=new Map();for(let i=1;i<=c.mainMax;i++)counts.set(i,0);const history=state.history.filter(g=>g.game===profileGame);const ref=state.references[profileGame]||{main:c.referenceMain,extra:c.referenceExtra};ref.main.forEach(n=>counts.set(n,(counts.get(n)||0)+3));history.forEach(g=>g.main.forEach(n=>counts.set(n,(counts.get(n)||0)+1)));const hot=[...counts.entries()].sort((a,b)=>b[1]-a[1]||a[0]-b[0]).slice(0,5).map(([n])=>n);const cold=[...counts.entries()].sort((a,b)=>a[1]-b[1]||a[0]-b[0]).slice(0,5).map(([n])=>n);return{hot:hot.length?hot:c.hotDefault,cold:cold.length?cold:c.coldDefault}}
+    function renderStats(){const profile=getProfile(game);$("#hotChips").innerHTML=profile.hot.map(n=>`<span class="chip hot">🔥 ${n}</span>`).join("");$("#coldChips").innerHTML=profile.cold.map(n=>`<span class="chip cold">❄️ ${n}</span>`).join("");if(currentGrid&&currentGrid.game===game){const scored=scoreGrid(currentGrid);$("#smartScoreText").textContent=`Score Smart+ de la grille actuelle : ${scored.score}/99 · ${scored.reason.slice(0,3).join(", ")||"analyse locale"}.`}else{$("#smartScoreText").textContent="Génère une grille pour afficher le score Smart+."}}
+    function renderScorePill(){if(!currentGrid){$("#scorePill").classList.remove("show");return}const scored=scoreGrid(currentGrid);currentGrid.score=scored.score;currentGrid.reason=scored.reason;$("#scorePill").textContent=`Score Smart+ : ${scored.score}/99`;$("#scorePill").classList.add("show")}
+    function verifyGrid(){if(!currentGrid||currentGrid.game!==game){toast("Génère d’abord une grille.");return}const c=CONFIG[game];const ref=getReference();const mainHits=currentGrid.main.filter(n=>ref.main.includes(n)).length;const extraHits=currentGrid.extra.filter(n=>ref.extra.includes(n)).length;let possible=false;if(game==="euro")possible=mainHits>=2||(mainHits>=1&&extraHits>=2);else possible=mainHits>=2||extraHits>=1;$("#gainText").innerHTML=`<span class="${possible?"gain-ok":"gain-no"}">${possible?"✅ Correspondance détectée":"❌ Aucune correspondance suffisante"}</span><br>${mainHits} numéro(s) trouvé(s)<br>${extraHits} ${c.extraName.toLowerCase()} trouvé(s)<br>Résultat indicatif : montant et validité à vérifier sur la source officielle ou sur ton reçu.`;openTab("gain");toast("Vérification terminée 🔎")}
+    function openTab(id){$$(".panel-tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===id));$$(".section").forEach(s=>s.classList.toggle("active",s.id===id))}
+    function saveHistory(grid){state.history.unshift({...grid,createdAt:new Date().toISOString()});state.history=state.history.slice(0,40);saveState()}
+    function renderHistory(){const items=state.history.filter(g=>g.game===game);if(!items.length){$("#historyList").innerHTML=`<p style="color:#6c7280;">Aucune grille pour le moment.</p>`;return}$("#historyList").innerHTML=items.map(g=>{const c=CONFIG[g.game];const icon=g.type==="Premium"?"✨":"🎲";const score=g.score?` · ${g.score}/99`:"";return`<div class="history-item">${icon} ${g.type}${score} · ${c.name} : ${g.main.join(" - ")} | ${g.extra.join(" - ")}</div>`}).join("")}
+    function clearHistory(){if(!confirm("Effacer l’historique ?"))return;state.history=[];saveState();renderHistory();renderStats();toast("Historique effacé")}
+    function editReference(){const c=CONFIG[game];const mainRaw=prompt(`Entre les ${c.mainCount} numéros officiels séparés par espace`,c.referenceMain.join(" "));if(!mainRaw)return;const extraRaw=prompt(`Entre ${c.extraCount} ${c.extraName.toLowerCase()} séparé(s) par espace`,c.referenceExtra.join(" "));if(!extraRaw)return;const main=parseNums(mainRaw,c.mainCount,c.mainMax);const extra=parseNums(extraRaw,c.extraCount,c.extraMax);if(!main||!extra){toast("Format incorrect");return}state.references[game]={main,extra};saveState();renderReference();renderStats();toast("Résultat de référence modifié")}
+    function parseNums(raw,count,max){const nums=raw.split(/[\s,;.-]+/).map(v=>Number(v.trim())).filter(Number.isInteger);const unique=[...new Set(nums)].sort((a,b)=>a-b);if(unique.length!==count)return null;if(unique.some(n=>n<1||n>max))return null;return unique}
+    function copyGrid(){if(!currentGrid)return toast("Aucune grille à copier.");const c=CONFIG[currentGrid.game];const text=`${c.name} : ${currentGrid.main.join(" - ")} | ${c.extraName} : ${currentGrid.extra.join(" - ")} — Aucun gain garanti.`;navigator.clipboard.writeText(text).then(()=>toast("Grille copiée 📋")).catch(()=>toast(text))}
+    function shareWhatsapp(){if(!currentGrid)return toast("Aucune grille à partager.");const c=CONFIG[currentGrid.game];const text=encodeURIComponent(`${c.name} : ${currentGrid.main.join(" - ")} | ${c.extraName} : ${currentGrid.extra.join(" - ")}\nGénéré avec Euroloto Galactic. Aucun gain garanti.`);window.open(`https://wa.me/?text=${text}`,"_blank")}
+    function copyLegal(){const text="Euroloto Galactic est une application indépendante, non affiliée à la FDJ. Les numéros sont générés aléatoirement. Aucun tirage, score, statistique, algorithme ou système ne garantit un gain.";navigator.clipboard.writeText(text).then(()=>toast("Avertissement copié")).catch(()=>toast(text))}
+    function unlockPremium(callback){if(state.premium){toast("Smart+ déjà activé");if(typeof callback==="function")callback();return}const code=prompt("Code Premium");if(!code)return;if(code.trim().toLowerCase()!==PREMIUM_CODE){toast("Code Premium incorrect");return}state.premium=true;saveState();renderSmartBadge();toast("Smart+ activé ✅");if(typeof callback==="function")setTimeout(callback,300)}
+    function updateTimer(){const c=CONFIG[game];const next=getNextDraw();const diff=next.getTime()-Date.now();if(diff<=0){$("#d").textContent="0";$("#h").textContent="0";$("#m").textContent="0";$("#s").textContent="0";return}const total=Math.floor(diff/1000);const days=Math.floor(total/86400);const hours=Math.floor((total%86400)/3600);const minutes=Math.floor((total%3600)/60);const seconds=total%60;$("#d").textContent=days;$("#h").textContent=hours;$("#m").textContent=minutes;$("#s").textContent=seconds;$("#drawText").textContent=`Prochain tirage : ${formatDrawDate(next)} vers ${pad(c.drawHour)}:${pad(c.drawMinute)}`}
+    function getNextDraw(){const c=CONFIG[game];const now=new Date();for(let add=0;add<10;add++){const d=new Date(now);d.setDate(now.getDate()+add);d.setHours(c.drawHour,c.drawMinute,0,0);if(c.drawDays.includes(d.getDay())&&d.getTime()>now.getTime())return d}const fallback=new Date(now);fallback.setDate(now.getDate()+1);fallback.setHours(c.drawHour,c.drawMinute,0,0);return fallback}
+    function formatDrawDate(date){return new Intl.DateTimeFormat("fr-FR",{weekday:"long",day:"numeric",month:"long"}).format(date)}
+    function pickUnique(min,max,count){const nums=[];while(nums.length<count){const n=secureRandomInt(max-min+1)+min;if(!nums.includes(n))nums.push(n)}return nums.sort((a,b)=>a-b)}
+    function secureRandomInt(maxExclusive){if(window.crypto&&window.crypto.getRandomValues){const array=new Uint32Array(1);const limit=Math.floor(0x100000000/maxExclusive)*maxExclusive;do{window.crypto.getRandomValues(array)}while(array[0]>=limit);return array[0]%maxExclusive}return Math.floor(Math.random()*maxExclusive)}
+    function makeId(){if(crypto&&crypto.randomUUID)return crypto.randomUUID();return"id-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2)}
+    function pad(n){return String(n).padStart(2,"0")}
+    function initInstall(){window.addEventListener("beforeinstallprompt",event=>{event.preventDefault();deferredPrompt=event;$("#installBtn").classList.add("show")});window.addEventListener("appinstalled",()=>{deferredPrompt=null;$("#installBtn").classList.remove("show");toast("Application installée ✅")})}
+    async function installApp(){if(!deferredPrompt){toast("Menu navigateur → Ajouter à l’écran d’accueil");return}deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;$("#installBtn").classList.remove("show")}
+    let toastTimer=null;function toast(msg){$("#toast").textContent=msg;$("#toast").classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>$("#toast").classList.remove("show"),2400)}
+    function registerSW(){if(!("serviceWorker"in navigator))return;window.addEventListener("load",()=>{navigator.serviceWorker.register("/sw.js").catch(()=>{})})}
   </script>
 </body>
 </html>
