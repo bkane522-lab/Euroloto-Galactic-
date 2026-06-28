@@ -1,4 +1,4 @@
-const CACHE_NAME = "euroloto-galactic-v1.3.3-deep-blue-compact";
+const CACHE_NAME = "euroloto-galactic-v1.4-auto-results";
 
 const CORE_ASSETS = [
   "/",
@@ -42,6 +42,11 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(request.url);
 
   if (url.origin !== self.location.origin) return;
+
+  if (url.pathname.startsWith("/api/")) {
+    event.respondWith(fetch(request));
+    return;
+  }
 
   if (request.mode === "navigate") {
     event.respondWith(
