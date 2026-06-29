@@ -2,7 +2,7 @@
   "id": "/",
   "name": "Euroloto Galactic",
   "short_name": "Euroloto",
-  "description": "Générateur indépendant EuroMillions et Loto avec résultats automatiques et Premium Smart+ privé.",
+  "description": "Générateur indépendant EuroMillions et Loto avec Smart+ Rational et résultats automatiques.",
   "lang": "fr-FR",
   "start_url": "/?source=pwa",
   "scope": "/",
