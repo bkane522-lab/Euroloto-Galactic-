@@ -1,4 +1,4 @@
-const CACHE_NAME = "euroloto-galactic-v1.5.2-runtime-fix";
+const CACHE_NAME = "euroloto-galactic-v1.5.3-premium-anti-anchor";
 
 const CORE_ASSETS = [
   "/",
