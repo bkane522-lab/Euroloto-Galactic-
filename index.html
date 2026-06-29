@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#061950" />
   <meta name="description" content="Euroloto Galactic : générateur indépendant de grilles EuroMillions et Loto avec Classique, Smart+, timer, stats chaud/froid, historique et vérification indicative et Premium privé V1.4 avec résultats auto." />
-  <title>Euroloto Galactic V1.4.2</title>
+  <title>Euroloto Galactic V1.4.3</title>
   <link rel="manifest" href="/manifest.json" />
   <link rel="apple-touch-icon" href="/icon-192.png" />
   <style>
@@ -36,7 +36,7 @@
   </style>
 
   <style id="compact-mobile-v113">
-    /* V1.4.2 Buttons Hotfix: remonte les boutons pour éviter la barre Android */
+    /* V1.4.3 Buttons Fix: remonte les boutons pour éviter la barre Android */
     .app {
       padding: 9px 12px calc(8px + env(safe-area-inset-bottom));
     }
@@ -153,7 +153,7 @@
 
 
   <style id="mini-panel-v112">
-    /* V1.4.2 Buttons Hotfix : le bouton Modifier reste visible sans scroll */
+    /* V1.4.3 Buttons Fix : le bouton Actualiser reste visible sans scroll */
     .panel {
       min-height: 150px;
     }
@@ -295,7 +295,7 @@
 
   </style>
   <style id="apk-polish-v121">
-    /* V1.4.2 Buttons Hotfix : logo V3 premium intégré */
+    /* V1.4.3 Buttons Fix : logo V3 premium intégré */
     .app-icon {
       overflow: hidden;
       padding: 0;
@@ -608,31 +608,38 @@
         <div class="section" id="history"><div class="box"><h4>📜 Historique</h4><div id="historyList"></div><button class="clear-btn" id="clearHistoryBtn">🧹 Effacer</button></div></div><div class="section" id="infos"><div class="box info-mini"><h4>ℹ️ Infos</h4><p class="info-line">App indépendante.</p><p class="info-line">Résultats : auto.</p><p class="info-line">Premium : moteur privé.</p><p class="info-line">Score Smart+ : indicatif.</p><p class="legal-line">Aucun gain garanti.</p><button class="clear-btn copy-mini-btn" id="copyLegalBtn">Copier l’avertissement</button></div></div>
       </div>
     </section>
-    <p class="footer">Application indépendante, non affiliée à la FDJ.<br>Numéros générés aléatoirement. Aucun gain garanti. V1.4.2 Buttons Hotfix</p>
+    <p class="footer">Application indépendante, non affiliée à la FDJ.<br>Numéros générés aléatoirement. Aucun gain garanti. V1.4.3 Buttons Fix</p>
   </main>
   <div class="toast" id="toast"></div>
   <script>
-    const PREMIUM_CODE="galactic2026";const STORAGE_KEY="euroloto_galactic_v141_auto_only";const LEGACY_KEYS=["euroloto_galactic_v13_secret_premium","euroloto_galactic_v12_premium_engine","euroloto_galactic_v11_smart_plus","euroloto_galactic_v112_mini_panel","euroloto_galactic_v111_compact_mobile"];const PREMIUM_SIMULATIONS=5000;
+    const PREMIUM_CODE="galactic2026";const STORAGE_KEY="euroloto_galactic_v143_buttons_fix";const LEGACY_KEYS=["euroloto_galactic_v13_secret_premium","euroloto_galactic_v12_premium_engine","euroloto_galactic_v11_smart_plus","euroloto_galactic_v112_mini_panel","euroloto_galactic_v111_compact_mobile"];const PREMIUM_SIMULATIONS=5000;
     const CONFIG={euro:{name:"EuroMillions",icon:"⭐",format:"5 + 2",mainMax:50,mainCount:5,extraMax:12,extraCount:2,extraName:"ÉTOILES",drawDays:[2,5],drawHour:21,drawMinute:5,referenceMain:[18,25,31,37,45],referenceExtra:[4,9],hotDefault:[30,31,24,7,41],coldDefault:[43,1,33,46,8]},loto:{name:"Loto",icon:"🎱",format:"5 + 1",mainMax:49,mainCount:5,extraMax:10,extraCount:1,extraName:"NUMÉRO CHANCE",drawDays:[1,3,6],drawHour:20,drawMinute:20,referenceMain:[1,15,32,37,39],referenceExtra:[1],hotDefault:[7,24,30,31,41],coldDefault:[1,8,33,43,46]}};
     let game="euro";let currentGrid=null;let state=loadState();let deferredPrompt=null;const $=s=>document.querySelector(s);const $$=s=>Array.from(document.querySelectorAll(s));init();
     function init(){bind();initInstall();renderGame();renderHistory();renderStats();updateTimer();setInterval(updateTimer,1000);registerSW();setTimeout(()=>loadAutoReference(game,false),500)}
     function loadState(){const empty={premium:false,history:[],references:{}};try{let raw=localStorage.getItem(STORAGE_KEY);if(!raw){for(const key of LEGACY_KEYS){raw=localStorage.getItem(key);if(raw)break}}if(!raw)return empty;const data=JSON.parse(raw);const clean={premium:Boolean(data.premium),history:Array.isArray(data.history)?data.history:[],references:data.references||{}};localStorage.setItem(STORAGE_KEY,JSON.stringify(clean));return clean}catch{return empty}}
     function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
     function bind(){
-      const set=(sel,fn)=>{const el=$(sel); if(el) el.onclick=fn};
-      set("#euroBtn",()=>switchGame("euro"));
-      set("#lotoBtn",()=>switchGame("loto"));
-      set("#classicBtn",()=>generateClassic());
-      set("#premiumBtn",()=>generatePremium());
-      set("#smartBtn",()=>unlockPremium());
-      set("#installBtn",installApp);
-      set("#copyBtn",copyGrid);
-      set("#waBtn",shareWhatsapp);
-      set("#verifyBtn",verifyGrid);
-      set("#autoReferenceBtn",()=>loadAutoReference(game,true));
-      set("#clearHistoryBtn",clearHistory);
-      set("#copyLegalBtn",copyLegal);
-      $$(".panel-tab").forEach(btn=>{btn.onclick=()=>openTab(btn.dataset.tab)})
+      const set = (sel, fn) => {
+        const el = $(sel);
+        if (el) el.onclick = fn;
+      };
+
+      set("#euroBtn", () => switchGame("euro"));
+      set("#lotoBtn", () => switchGame("loto"));
+      set("#classicBtn", () => generateClassic());
+      set("#premiumBtn", () => generatePremium());
+      set("#smartBtn", () => unlockPremium());
+      set("#installBtn", installApp);
+      set("#copyBtn", copyGrid);
+      set("#waBtn", shareWhatsapp);
+      set("#verifyBtn", verifyGrid);
+      set("#autoReferenceBtn", () => loadAutoReference(game, true));
+      set("#clearHistoryBtn", clearHistory);
+      set("#copyLegalBtn", copyLegal);
+
+      $$(".panel-tab").forEach((btn) => {
+        btn.onclick = () => openTab(btn.dataset.tab);
+      });
     }
     function switchGame(next){game=next;$("#euroBtn").classList.toggle("active",game==="euro");$("#lotoBtn").classList.toggle("active",game==="loto");renderGame();renderStats();renderHistory();updateTimer();setTimeout(()=>loadAutoReference(game,false),250)}
     function renderGame(){const c=CONFIG[game];$("#gameTitle").textContent=c.name;$("#formatBadge").textContent=c.format;$("#extraLabel").textContent=c.extraName;if(!currentGrid||currentGrid.game!==game)currentGrid=buildClassicGrid();renderBalls(currentGrid);renderReference();renderSmartBadge();renderScorePill()}
@@ -650,6 +657,18 @@
       const date=ref.date?` · ${ref.date}`:"";
       $("#referenceText").innerHTML=`${c.name} · <span class="ref-source">Auto</span>${date}`;
       $("#referenceChips").innerHTML=ref.main.map(n=>`<span class="chip">${n}</span>`).join("")+ref.extra.map(n=>`<span class="chip hot">${n}</span>`).join("");
+    }
+    function buildClassicGrid(){
+      const c = CONFIG[game];
+      return {
+        id: makeId(),
+        game,
+        type: "Classique",
+        main: pickUnique(1, c.mainMax, c.mainCount),
+        extra: pickUnique(1, c.extraMax, c.extraCount),
+        score: 0,
+        createdAt: new Date().toISOString()
+      };
     }
     function generateClassic(){currentGrid=buildClassicGrid();currentGrid.score=scoreGrid(currentGrid).score;saveHistory(currentGrid);renderBalls(currentGrid);renderScorePill();renderHistory();renderStats();toast("Grille classique générée 🎲")}
     function generatePremium(){if(!state.premium){unlockPremium(()=>generatePremium());return}let best=null;for(let i=0;i<PREMIUM_SIMULATIONS;i++){const candidate=buildClassicGrid();candidate.type="Premium";candidate.engine="V1.3";candidate.profile=premiumProfileFor(i);const result=scoreGrid(candidate,candidate.profile);candidate.score=result.score;candidate.reason=result.reason;candidate.profileLabel=result.profileLabel;if(!best||candidate.score>best.score||(candidate.score===best.score&&tieBreaker(candidate)>tieBreaker(best)))best=candidate}currentGrid=best;saveHistory(currentGrid);renderBalls(currentGrid);renderScorePill();renderHistory();renderStats();toast("Premium généré ✨")}
