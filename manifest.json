@@ -2,7 +2,7 @@
   "id": "/",
   "name": "Euroloto Galactic",
   "short_name": "Euroloto",
-  "description": "Générateur indépendant EuroMillions et Loto avec Premium Smart+ rationnel et lien résultats FDJ officiel.",
+  "description": "Générateur indépendant EuroMillions, Loto et ticket Crescendo avec Premium Smart+ discret et lien FDJ officiel.",
   "lang": "fr-FR",
   "start_url": "/?source=pwa",
   "scope": "/",

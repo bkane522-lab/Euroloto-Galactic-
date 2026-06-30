@@ -1,4 +1,4 @@
-const CACHE_NAME = "euroloto-galactic-v1.5.7-crescendo-secret";
+const CACHE_NAME = "euroloto-galactic-v1.5.8-crescendo-ticket";
 
 const CORE_ASSETS = [
   "/",
@@ -9,7 +9,8 @@ const CORE_ASSETS = [
   "/icon-512.png",
   "/maskable-512.png",
   "/logo-v3-board.png",
-  "/.well-known/assetlinks.json"
+  "/.well-known/assetlinks.json",
+  "/api/latest-result.js"
 ];
 
 self.addEventListener("install", (event) => {
