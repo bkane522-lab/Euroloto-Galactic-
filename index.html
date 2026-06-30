@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#061950" />
-  <meta name="description" content="Euroloto Galactic : générateur indépendant de grilles EuroMillions et Loto avec Classique, Smart+, timer, stats chaud/froid, historique et vérification indicative et Premium Smart+ rationnel avec résultats auto." />
-  <title>Euroloto Galactic V1.5</title>
+  <meta name="description" content="Euroloto Galactic : générateur indépendant de grilles EuroMillions et Loto avec Classique, Smart+, timer, stats chaud/froid, historique et Smart+ discret, Premium, Crescendo et lien FDJ officiel." />
+  <title>Euroloto Galactic V1.5.7</title>
   <link rel="manifest" href="/manifest.json" />
   <link rel="apple-touch-icon" href="/icon-192.png" />
   <style>
@@ -33,10 +33,14 @@
     .toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);z-index:50;background:var(--text);color:white;border-radius:999px;padding:13px 20px;font-weight:950;opacity:0;pointer-events:none;transition:.25s;box-shadow:var(--shadow);max-width:calc(100% - 40px);text-align:center}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
     @media(max-height:780px){.hero{min-height:145px;padding-bottom:15px}.tagline h2{font-size:1.88rem}.tagline p{display:none}.main-card{padding:13px}.ball{width:44px;height:44px;font-size:1.05rem}.extra-ball{width:46px;height:46px}.btn{padding:12px 8px;font-size:.9rem}.time-box{padding:8px 4px}}
     @media(max-width:420px){.app{padding-left:10px;padding-right:10px}.hero{margin-left:-10px;margin-right:-10px}.brand h1{font-size:1.08rem}.brand p{font-size:.78rem}.smart-badge{padding:9px 12px}.install-badge{padding:7px 10px}.ball{width:42px;height:42px}.extra-ball{width:46px;height:46px}.action-grid.second{gap:7px}.btn{font-size:.84rem}.panel-tab{font-size:.70rem}}
+
+    .btn-crescendo{background:linear-gradient(135deg,#06276b,#0094ff 55%,#ffd84d);color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.28)}
+    .score-pill,.score-pill.show{display:none!important}
+    .secret-chip{background:#eef3ff;border-color:#cfdcf4;color:#0846a0}
   </style>
 
   <style id="compact-mobile-v113">
-    /* V1.5.6 FDJ Link Mode: remonte les boutons pour éviter la barre Android */
+    /* V1.5.7 Crescendo Secret: boutons premium discrets */
     .app {
       padding: 9px 12px calc(8px + env(safe-area-inset-bottom));
     }
@@ -153,7 +157,7 @@
 
 
   <style id="mini-panel-v112">
-    /* V1.5.6 FDJ Link Mode : le bouton FDJ reste visible sans scroll */
+    /* V1.5.7 Crescendo Secret : bouton Crescendo visible sans scroll */
     .panel {
       min-height: 150px;
     }
@@ -295,7 +299,7 @@
 
   </style>
   <style id="apk-polish-v121">
-    /* V1.5.6 FDJ Link Mode : logo V3 premium intégré */
+    /* V1.5.7 Crescendo Secret : logo V3 premium intégré */
     .app-icon {
       overflow: hidden;
       padding: 0;
@@ -617,9 +621,9 @@
       <div class="countdown"><div class="time-box"><strong id="d">0</strong><small>JOURS</small></div><div class="time-box"><strong id="h">0</strong><small>HEURES</small></div><div class="time-box"><strong id="m">0</strong><small>MIN</small></div><div class="time-box"><strong id="s">0</strong><small>SEC</small></div></div>
       <div class="label">NUMÉROS</div><div class="balls" id="mainBalls"></div>
       <div class="label" id="extraLabel">ÉTOILES</div><div class="balls" id="extraBalls"></div>
-      <div class="score-pill" id="scorePill">Score Smart+ : --/99</div>
+      <div class="score-pill" id="scorePill" aria-hidden="true"></div>
       <div class="action-grid"><button class="btn btn-blue" id="classicBtn">🎲 Classique</button><button class="btn btn-premium" id="premiumBtn">✨ Premium</button></div>
-      <div class="action-grid second"><button class="btn btn-white" id="copyBtn">📋 Copier</button><button class="btn btn-green" id="waBtn">WhatsApp</button><button class="btn btn-dark" id="verifyBtn">🔎 FDJ</button></div>
+      <div class="action-grid second"><button class="btn btn-white" id="copyBtn">📋 Copier</button><button class="btn btn-green" id="waBtn">WhatsApp</button><button class="btn btn-dark btn-crescendo" id="verifyBtn">🎼 Crescendo</button></div>
     </section>
     <section class="panel">
       <div class="panel-tabs"><button class="panel-tab active" data-tab="tirage">Tirage</button><button class="panel-tab" data-tab="gain">Gain</button><button class="panel-tab" data-tab="stats">Stats</button><button class="panel-tab" data-tab="history">Historique</button><button class="panel-tab" data-tab="infos">Infos</button></div>
@@ -627,14 +631,14 @@
         <div class="section active" id="tirage"><div class="box ref-box"><div class="ref-head"><h4>🏆 Tirage officiel</h4><div class="ref-actions"><button class="clear-btn mini-edit-btn auto-btn" id="autoReferenceBtn">FDJ officiel</button></div></div><p id="referenceText"></p><div class="chips reference-chips" id="referenceChips"></div></div></div>
         <div class="section" id="gain"><div class="box"><h4>💰 Gain remporté ou pas</h4><p id="gainText">Génère une grille puis ouvre FDJ officiel.</p></div></div>
         <div class="section" id="stats"><div class="box"><h4>📊 Statistiques Smart+</h4><div class="stats-grid"><div class="stat-mini"><p class="stat-title">🔥 Chauds</p><div class="chips mini-chips" id="hotChips"></div></div><div class="stat-mini"><p class="stat-title">❄️ Froids</p><div class="chips mini-chips" id="coldChips"></div></div></div><p id="smartScoreText" class="mini-note"></p></div></div>
-        <div class="section" id="history"><div class="box"><h4>📜 Historique</h4><div id="historyList"></div><button class="clear-btn" id="clearHistoryBtn">🧹 Effacer</button></div></div><div class="section" id="infos"><div class="box info-mini"><h4>ℹ️ Infos</h4><p class="info-line">App indépendante.</p><p class="info-line">Résultats : lien FDJ officiel.</p><p class="info-line">Smart+ : grille plus rationnelle.</p><p class="info-line">Loto : jackpot 1 / 19M.</p><p class="info-line">EuroMillions : jackpot 1 / 139M.</p><p class="legal-line">Aucun gain garanti.</p><button class="clear-btn copy-mini-btn" id="copyLegalBtn">Copier l’avertissement</button></div></div>
+        <div class="section" id="history"><div class="box"><h4>📜 Historique</h4><div id="historyList"></div><button class="clear-btn" id="clearHistoryBtn">🧹 Effacer</button></div></div><div class="section" id="infos"><div class="box info-mini"><h4>ℹ️ Infos</h4><p class="info-line">App indépendante.</p><p class="info-line">Résultats : lien FDJ officiel.</p><p class="info-line">Smart+ : moteur privé discret.</p><p class="info-line">Crescendo : génération premium en montée.</p><p class="info-line">Aucune méthode détaillée affichée.</p><p class="legal-line">Aucun gain garanti.</p><button class="clear-btn copy-mini-btn" id="copyLegalBtn">Copier l’avertissement</button></div></div>
       </div>
     </section>
-    <p class="footer">Application indépendante, non affiliée à la FDJ.<br>Numéros générés aléatoirement. Aucun gain garanti. V1.5.6 FDJ Link Mode</p>
+    <p class="footer">Application indépendante, non affiliée à la FDJ.<br>Numéros générés aléatoirement. Aucun gain garanti. V1.5.7 Crescendo Secret</p>
   </main>
   <div class="toast" id="toast"></div>
   <script>
-    const PREMIUM_CODE="galactic2026";const STORAGE_KEY="euroloto_galactic_v156_fdj-link-mode";const LEGACY_KEYS=["euroloto_galactic_v13_secret_premium","euroloto_galactic_v12_premium_engine","euroloto_galactic_v11_smart_plus","euroloto_galactic_v112_mini_panel","euroloto_galactic_v111_compact_mobile"];const PREMIUM_SIMULATIONS=6000;const FDJ_RESULTS_URL="https://www.fdj.fr/jeux-de-tirage/resultats";
+    const PREMIUM_CODE="galactic2026";const STORAGE_KEY="euroloto_galactic_v157_crescendo_secret";const LEGACY_KEYS=["euroloto_galactic_v13_secret_premium","euroloto_galactic_v12_premium_engine","euroloto_galactic_v11_smart_plus","euroloto_galactic_v112_mini_panel","euroloto_galactic_v111_compact_mobile"];const PREMIUM_SIMULATIONS=7000;const CRESCENDO_SIMULATIONS=7500;const FDJ_RESULTS_URL="https://www.fdj.fr/jeux-de-tirage/resultats";
     const CONFIG={euro:{name:"EuroMillions",icon:"⭐",format:"5 + 2",mainMax:50,mainCount:5,extraMax:12,extraCount:2,extraName:"ÉTOILES",drawDays:[2,5],drawHour:21,drawMinute:5,referenceMain:[18,25,31,37,45],referenceExtra:[4,9],hotDefault:[30,31,24,7,41],coldDefault:[43,1,33,46,8]},loto:{name:"Loto",icon:"🎱",format:"5 + 1",mainMax:49,mainCount:5,extraMax:10,extraCount:1,extraName:"NUMÉRO CHANCE",drawDays:[1,3,6],drawHour:20,drawMinute:20,referenceMain:[1,15,32,37,39],referenceExtra:[1],hotDefault:[7,24,30,31,41],coldDefault:[1,8,33,43,46]}};
     const POPULAR_NUMBERS=[1,2,3,4,5,7,9,10,11,12,13,14,15,18,20,21,22,23,24,25,30,31];
     const VERY_POPULAR_NUMBERS=[7,9,13];
@@ -656,7 +660,7 @@
       set("#installBtn", installApp);
       set("#copyBtn", copyGrid);
       set("#waBtn", shareWhatsapp);
-      set("#verifyBtn", verifyGrid);
+      set("#verifyBtn", () => generateCrescendo());
       set("#autoReferenceBtn", openFDJResults);
       set("#clearHistoryBtn", clearHistory);
       set("#copyLegalBtn", copyLegal);
@@ -698,7 +702,7 @@
       for(let i=0;i<PREMIUM_SIMULATIONS;i++){
         const candidate=buildClassicGrid();
         candidate.type="Premium";
-        candidate.engine="V1.5.6";
+        candidate.engine="V1.5.7";
         candidate.profile=premiumProfileFor(i);
         const result=scoreGrid(candidate,candidate.profile);
         candidate.score=result.score;
@@ -720,8 +724,80 @@
       renderScorePill();
       renderHistory();
       renderStats();
-      toast("Smart+ Rational généré ✨");
+      toast("Grille Premium générée ✨");
     }
+    function generateCrescendo(){
+      if(!state.premium){unlockPremium(()=>generateCrescendo());return}
+      const pool=[];
+      for(let i=0;i<CRESCENDO_SIMULATIONS;i++){
+        const candidate=buildCrescendoGrid();
+        candidate.type="Crescendo";
+        candidate.engine="V1.5.7";
+        candidate.profile="crescendo";
+        const result=scoreGrid(candidate,"wideCover");
+        const cScore=crescendoScore(candidate);
+        candidate.score=Math.max(1,Math.min(99,result.score+cScore));
+        candidate.reason=[];
+        candidate.profileLabel="Privé";
+        pool.push(candidate);
+      }
+      pool.sort((a,b)=>{
+        const sa=a.score+(tieBreaker(a)*0.01);
+        const sb=b.score+(tieBreaker(b)*0.01);
+        return sb-sa;
+      });
+      const clean=pool.filter(g=>!g.main.includes(1)&&g.main[0]>=3);
+      const source=clean.length>=20?clean:pool;
+      const top=source.slice(0,Math.min(16,source.length));
+      currentGrid=top[secureRandomInt(top.length)]||source[0]||pool[0];
+      saveHistory(currentGrid);
+      renderBalls(currentGrid);
+      renderScorePill();
+      renderHistory();
+      renderStats();
+      toast("Crescendo généré 🎼");
+    }
+    function buildCrescendoGrid(){
+      const c=CONFIG[game];
+      const bands=game==="euro"?[[3,13],[14,24],[25,34],[35,43],[44,50]]:[[3,13],[14,23],[24,33],[34,42],[43,49]];
+      let main=bands.map(([min,max])=>min+secureRandomInt(max-min+1));
+      main=[...new Set(main)].sort((a,b)=>a-b);
+      while(main.length<c.mainCount){
+        const n=2+secureRandomInt(c.mainMax-1);
+        if(!main.includes(n))main.push(n);
+        main.sort((a,b)=>a-b);
+      }
+      let extra;
+      if(game==="euro"){
+        const first=2+secureRandomInt(5);
+        extra=[first];
+        while(extra.length<2){const n=1+secureRandomInt(c.extraMax);if(!extra.includes(n)&&![7,9,12].includes(n))extra.push(n)}
+        extra=extra.sort((a,b)=>a-b);
+      }else{
+        let n=1+secureRandomInt(c.extraMax);
+        if([7,9].includes(n))n=(n%10)+1;
+        extra=[n];
+      }
+      return{id:makeId(),game,type:"Crescendo",main,extra,score:0,createdAt:new Date().toISOString()};
+    }
+    function crescendoScore(grid){
+      const gaps=[];
+      for(let i=1;i<grid.main.length;i++)gaps.push(grid.main[i]-grid.main[i-1]);
+      let score=0;
+      const softRise=gaps.every((g,i)=>i===0||g>=gaps[i-1]-2);
+      const noTinyGap=gaps.every(g=>g>=3);
+      const wideEnd=grid.main[grid.main.length-1]-grid.main[0]>=34;
+      const hasHigh=grid.main.filter(n=>n>31).length>=2;
+      const avoidsDates=grid.main.filter(n=>n<=31).length<=3;
+      if(softRise)score+=8;
+      if(noTinyGap)score+=7;
+      if(wideEnd)score+=8;
+      if(hasHigh)score+=6;
+      if(avoidsDates)score+=6;
+      if(grid.main.includes(1))score-=30;
+      return score;
+    }
+
     function premiumProfileFor(i){
       const profiles=["rational","antiPopular","wideCover","lowShare","balanced"];
       return profiles[i%profiles.length];
@@ -855,8 +931,20 @@
       const cold=[...counts.entries()].sort((a,b)=>a[1]-b[1]||a[0]-b[0]).slice(0,5).map(([n])=>n);
       return{hot,cold};
     }
-    function renderStats(){const profile=getProfile(game);$("#hotChips").innerHTML=profile.hot.map(n=>`<span class="chip hot">${n}</span>`).join("");$("#coldChips").innerHTML=profile.cold.map(n=>`<span class="chip cold">${n}</span>`).join("");if(currentGrid&&currentGrid.game===game){const scored=scoreGrid(currentGrid,currentGrid.profile);const label=currentGrid.type==="Premium"?"Premium privé":"Analyse locale";$("#smartScoreText").textContent=`${label} · ${scored.score}/99 · grille moins évidente.`}else{$("#smartScoreText").textContent="Smart+ Rational. Aucun gain garanti."}}
-    function renderScorePill(){if(!currentGrid){$("#scorePill").classList.remove("show");return}const scored=scoreGrid(currentGrid,currentGrid.profile);currentGrid.score=scored.score;currentGrid.reason=scored.reason;currentGrid.profileLabel=scored.profileLabel;$("#scorePill").textContent=`Score Smart+ : ${scored.score}/99`;$("#scorePill").classList.add("show")}
+    function renderStats(){
+      if($("#hotChips"))$("#hotChips").innerHTML=`<span class="chip secret-chip">Smart+ privé</span><span class="chip secret-chip">Anti-répétition</span><span class="chip secret-chip">Crescendo</span>`;
+      if($("#coldChips"))$("#coldChips").innerHTML=`<span class="chip secret-chip">Calcul caché</span><span class="chip secret-chip">Stats internes</span>`;
+      if($("#smartScoreText"))$("#smartScoreText").textContent="Les détails Premium restent cachés. Aucun gain garanti.";
+    }
+    function renderScorePill(){
+      if(!currentGrid)return;
+      const scored=scoreGrid(currentGrid,currentGrid.profile);
+      currentGrid.score=scored.score;
+      currentGrid.reason=scored.reason;
+      currentGrid.profileLabel=scored.profileLabel;
+      const el=$("#scorePill");
+      if(el){el.textContent="";el.classList.remove("show");}
+    }
 
     async function loadAutoReference(targetGame=game,loud=true){
       if(loud)openFDJResults();
@@ -875,7 +963,7 @@
     }
     function openTab(id){$$(".panel-tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===id));$$(".section").forEach(s=>s.classList.toggle("active",s.id===id))}
     function saveHistory(grid){state.history.unshift({...grid,createdAt:new Date().toISOString()});state.history=state.history.slice(0,40);saveState()}
-    function renderHistory(){const items=state.history.filter(g=>g.game===game);if(!items.length){$("#historyList").innerHTML=`<p style="color:#6c7280;">Aucune grille pour le moment.</p>`;return}$("#historyList").innerHTML=items.map(g=>{const c=CONFIG[g.game];const icon=g.type==="Premium"?"✨":"🎲";const score=g.score?` · ${g.score}/99`:"";return`<div class="history-item">${icon} ${g.type}${score} · ${c.name} : ${g.main.join(" - ")} | ${g.extra.join(" - ")}</div>`}).join("")}
+    function renderHistory(){const items=state.history.filter(g=>g.game===game);if(!items.length){$("#historyList").innerHTML=`<p style="color:#6c7280;">Aucune grille pour le moment.</p>`;return}$("#historyList").innerHTML=items.map(g=>{const c=CONFIG[g.game];const icon=g.type==="Crescendo"?"🎼":(g.type==="Premium"?"✨":"🎲");return`<div class="history-item">${icon} ${g.type} · ${c.name} : ${g.main.join(" - ")} | ${c.extra.join(" - ")}</div>`}).join("")}
     function clearHistory(){if(!confirm("Effacer l’historique ?"))return;state.history=[];saveState();renderHistory();renderStats();toast("Historique effacé")}
     function parseNums(raw,count,max){const nums=raw.split(/[\s,;.-]+/).map(v=>Number(v.trim())).filter(Number.isInteger);const unique=[...new Set(nums)].sort((a,b)=>a-b);if(unique.length!==count)return null;if(unique.some(n=>n<1||n>max))return null;return unique}
     function openFDJResults(){window.open(FDJ_RESULTS_URL,"_blank","noopener,noreferrer");toast("Ouverture FDJ officiel 🔎")}
