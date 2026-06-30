@@ -1,4 +1,4 @@
-const CACHE_NAME = "euroloto-galactic-v1.5.5-api-webhandler";
+const CACHE_NAME = "euroloto-galactic-v1.5.6-fdj-link-mode";
 
 const CORE_ASSETS = [
   "/",
